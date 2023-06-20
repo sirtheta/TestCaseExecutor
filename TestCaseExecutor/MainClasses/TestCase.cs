@@ -6,7 +6,9 @@ using TestCaseExecutor.Commands;
 
 namespace TestCaseExecutor.MainClasses
 {
-
+    /// <summary>
+    /// Class for the testcases
+    /// </summary>
     internal class TestCase : INotifyPropertyChanged
     {
         public string? ID { get; set; }
@@ -26,10 +28,11 @@ namespace TestCaseExecutor.MainClasses
             set
             {
                 _isExpanded = value;
-                OnPropertyChanged(nameof(IsExpanded));
+                OnPropertyChanged();
             }
         }
 
+        // command to toggle the expand of the testcase
         public ICommand ToggleExpandCommand
         {
             get;

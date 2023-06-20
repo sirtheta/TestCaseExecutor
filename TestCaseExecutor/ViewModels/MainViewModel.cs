@@ -34,6 +34,7 @@ namespace TestCaseExecutor.ViewModels
         public ICommand BtnSaveCurrentTestSuite { get; private set; }
         public ICommand BtnLoadSavedTestSuite { get; private set; }
 
+        // gets or sets the checkbox for each teststep
         public bool CheckBoxClicked
         {
             get => _checkBoxClicked;
@@ -44,7 +45,7 @@ namespace TestCaseExecutor.ViewModels
             }
         }
 
-
+        // Import the testsuite from a csv file
         private void LoadCSVFile(object obj)
         {
             LoadCSVFileToList load = new();
@@ -56,10 +57,19 @@ namespace TestCaseExecutor.ViewModels
 
             if (ofd.ShowDialog() == true)
             {
-                TestCaseCollection = new ObservableCollection<TestCase>(load.LoadCSVFile(ofd.FileName));
+                try
+                {
+                    TestCaseCollection = new ObservableCollection<TestCase>(load.LoadCSVFile(ofd.FileName));
+                    ShowNotification("Success", "Test suite successfully imported.", NotificationType.Success);
+                }
+                catch (System.Exception)
+                {
+                    ShowNotification("Error", "File could not be loaded", NotificationType.Error);
+                }
             }
         }
 
+        // save current state of testsuite to JSON
         private void SaveCurrentTestSuite(object obj)
         {
             SaveFileDialog saveFileDialog = new()
@@ -76,6 +86,7 @@ namespace TestCaseExecutor.ViewModels
             }
         }
 
+        // Load saved test suite from JSON
         private void LoadSavedTestSuite(object obj)
         {
             OpenFileDialog ofd = new()
@@ -86,7 +97,16 @@ namespace TestCaseExecutor.ViewModels
 
             if (ofd.ShowDialog() == true)
             {
-                TestCaseCollection = new ObservableCollection<TestCase>(SaveAndLoadTestData.LoadTestDataFile(ofd.FileName));
+                try
+                {
+                    TestCaseCollection = new ObservableCollection<TestCase>(SaveAndLoadTestData.LoadTestDataFile(ofd.FileName));
+                    ShowNotification("Success", "Test suite successfully loaded.", NotificationType.Success);
+                }
+                catch (System.Exception)
+                {
+                    ShowNotification("Error", "File could not be loaded", NotificationType.Error);
+                }
+
             }
         }
     }

@@ -10,6 +10,11 @@ namespace TestCaseExecutor.Logic
 {
     internal class LoadCSVFileToList
     {
+        /// <summary>
+        /// Load a testsuite from a csv file and return a list of TestCase
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         internal IList<TestCase> LoadCSVFile(string fileName)
         {
             List<ImportCSVMapping> csvMapping = new();

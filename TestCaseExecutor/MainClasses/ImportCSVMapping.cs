@@ -3,6 +3,9 @@ using System;
 
 namespace TestCaseExecutor.MainClasses
 {
+    /// <summary>
+    /// Mappingclass of the test suite CSV exported from azure devops
+    /// </summary>
     internal class ImportCSVMapping
     {
         [Index(0)]
