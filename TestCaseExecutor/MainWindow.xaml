@@ -46,22 +46,52 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel>
+                                <StackPanel.Style>
+                                    <Style TargetType="StackPanel">
+                                        <Setter Property="Background" Value="Transparent" />
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#DEECF9" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </StackPanel.Style>
                                 <StackPanel Orientation="Horizontal">
                                     <Button Content="{Binding IsExpanded, Converter={StaticResource ExpandButtonContentConverter}}" 
                                             Command="{Binding ToggleExpandCommand}" 
-                                            CommandParameter="{Binding}" />
-                                    <Label Content="{Binding ID}" FontSize="22" FontWeight="Bold"/>
-                                    <TextBlock Text="{Binding Title}" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="22" FontWeight="Bold" />
+                                            CommandParameter="{Binding}" 
+                                            Margin="10,0,10,0"/>
+                                    <Label Content="{Binding ID}" FontSize="22" FontWeight="Bold" Margin="0,0,0,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding Title}" Margin="10,0,0,10" TextWrapping="Wrap" VerticalAlignment="Center" Width="550" FontSize="22" FontWeight="Bold" />
                                 </StackPanel>
                                 <ItemsControl ItemsSource="{Binding Path=TestSteps}" Visibility="{Binding IsExpanded, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                    <Label Grid.Column="0" Content="{Binding TestStepID}" VerticalAlignment="Center" />
-                                                    <TextBlock Grid.Column="1" Text="{Binding StepAction}" TextWrapping="Wrap" VerticalAlignment="Center" />
-                                                    <TextBlock Grid.Column="2" Text="{Binding StepExpected}" TextWrapping="Wrap" VerticalAlignment="Center" />
-                                                <CheckBox Grid.Column="3" IsChecked="{Binding Path=CheckBoxClicked, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0" />
-                                            </StackPanel>
+                                            <DockPanel>
+                                                <DockPanel.Style>
+                                                    <Style TargetType="DockPanel">
+                                                        <Setter Property="Background" Value="Transparent" />
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Background" Value="WhiteSmoke" />
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </DockPanel.Style>
+                                                <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="25"></ColumnDefinition>
+                                                            <ColumnDefinition Width="400"></ColumnDefinition>
+                                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                                        </Grid.ColumnDefinitions>
+                                                        <Label Grid.Column="0" Content="{Binding TestStepID}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                                        <TextBlock Grid.Column="1" Text="{Binding StepAction}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                                                        <TextBlock Grid.Column="2" Text="{Binding StepExpected}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                                                    </Grid>
+                                                </StackPanel>
+                                                <CheckBox IsChecked="{Binding Path=CheckBoxClicked, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,25,0" />
+                                            </DockPanel>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
