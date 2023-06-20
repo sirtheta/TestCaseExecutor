@@ -6,10 +6,14 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:TestCaseExecutor"
         xmlns:viewmodels="clr-namespace:TestCaseExecutor.ViewModels"
-        xmlns:notifications="clr-namespace:Notifications.Wpf.Core.Controls;assembly=Notifications.Wpf.Core"
+        xmlns:notifications="clr-namespace:Notifications.Wpf.Core.Controls;assembly=Notifications.Wpf.Core" 
+        xmlns:helper="clr-namespace:TestCaseExecutor.Helpers"
         d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
         mc:Ignorable="d"
-        Title="TestCaseExecutor" Height="450" Width="800">
+        Title="TestCaseExecutor" Height="850" Width="1024">
+    <Window.Resources>
+        <helper:ExpandButtonContentConverter x:Key="ExpandButtonContentConverter" />
+    </Window.Resources>
     <Grid>
         <!--defines the area where to show the totification toast-->
         <notifications:NotificationArea Panel.ZIndex="10" 
@@ -37,32 +41,26 @@
                         FontSize="25" Height="30" Width="30" 
                         Padding="0"/>
             </StackPanel>
-            <!--<StackPanel>
-                <Label Content="Test" />
-                <Label Content="Test" />
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="T" Margin="10,0,0,0" />
-                    <TextBlock Text="T" Margin="10,0,0,0" TextWrapping="Wrap" Width="250" VerticalAlignment="Center"/>
-                    <TextBlock Text="T" Margin="10,0,0,0" TextWrapping="Wrap" Width="250" VerticalAlignment="Center"/>
-                    <CheckBox IsChecked="{Binding Path=CheckBoxClicked, UpdateSourceTrigger=PropertyChanged}" Name="Test"/>
-                </StackPanel>
-            </StackPanel>-->
-
             <ScrollViewer>
                 <ItemsControl ItemsSource="{Binding Path=TestCaseCollection}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <Label Content="{Binding ID}" />
-                                <Label Content="{Binding Title}" />
-                                <ItemsControl ItemsSource="{Binding Path=TestSteps}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="{Binding IsExpanded, Converter={StaticResource ExpandButtonContentConverter}}" 
+                                            Command="{Binding ToggleExpandCommand}" 
+                                            CommandParameter="{Binding}" />
+                                    <Label Content="{Binding ID}" FontSize="22" FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Title}" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="22" FontWeight="Bold" />
+                                </StackPanel>
+                                <ItemsControl ItemsSource="{Binding Path=TestSteps}" Visibility="{Binding IsExpanded, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <StackPanel>
-                                                <Label Content="{Binding TestStepID}" Margin="10,0,0,0" />
-                                                <TextBlock Text="{Binding StepAction}" Margin="10,0,0,0"   TextWrapping="Wrap" Width="250" VerticalAlignment="Center"/>
-                                                <TextBlock Text="{Binding StepExpected}" Margin="10,0,0,0" TextWrapping="Wrap" Width="250" VerticalAlignment="Center"/>
-                                                <CheckBox IsChecked="{Binding Path=CheckBoxClicked, UpdateSourceTrigger=PropertyChanged}"/>
+                                            <StackPanel Orientation="Horizontal">
+                                                    <Label Grid.Column="0" Content="{Binding TestStepID}" VerticalAlignment="Center" />
+                                                    <TextBlock Grid.Column="1" Text="{Binding StepAction}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                                                    <TextBlock Grid.Column="2" Text="{Binding StepExpected}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                                                <CheckBox Grid.Column="3" IsChecked="{Binding Path=CheckBoxClicked, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0" />
                                             </StackPanel>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>

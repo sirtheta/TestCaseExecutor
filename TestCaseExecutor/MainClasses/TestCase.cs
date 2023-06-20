@@ -1,13 +1,50 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows.Input;
+using TestCaseExecutor.Commands;
 
 namespace TestCaseExecutor.MainClasses
 {
 
-    internal class TestCase
+    internal class TestCase : INotifyPropertyChanged
     {
         public string? ID { get; set; }
         public string? Title { get; set; }
-        public ObservableCollection<TestStep> TestSteps { get; set; } = new ObservableCollection<TestStep>();
+        public List<TestStep> TestSteps { get; set; } = new List<TestStep>();
+
+        private bool _isExpanded = false;
+
+        public TestCase()
+        {
+            ToggleExpandCommand = new RelayCommand<object>(ToggleExpand);
+        }
+
+        public bool IsExpanded
+        {
+            get { return _isExpanded; }
+            set
+            {
+                _isExpanded = value;
+                OnPropertyChanged(nameof(IsExpanded));
+            }
+        }
+
+        public ICommand ToggleExpandCommand
+        {
+            get;
+        }
+
+        private void ToggleExpand(object obj)
+        {
+            IsExpanded = !IsExpanded;
+        }
+
+        // INotifyPropertyChanged implementation
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

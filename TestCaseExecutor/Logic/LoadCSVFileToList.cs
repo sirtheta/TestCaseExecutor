@@ -39,7 +39,7 @@ namespace TestCaseExecutor.Logic
                     {
                         ID = mapping.ID,
                         Title = mapping.Title,
-                        TestSteps = new ObservableCollection<TestStep>()
+                        TestSteps = new List<TestStep>()
                     };
 
                     testCases.Add(testCase);
