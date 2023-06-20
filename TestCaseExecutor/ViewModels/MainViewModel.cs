@@ -13,7 +13,8 @@ namespace TestCaseExecutor.ViewModels
         public MainViewModel()
         {
             BtnLoadCSVFile = new RelayCommand<object>(LoadCSVFile);
-            BtnSaveCSVFile = new RelayCommand<object>(SaveCSVFile);
+            BtnSaveCurrentTestSuite = new RelayCommand<object>(SaveCurrentTestSuite);
+            BtnLoadSavedTestSuite = new RelayCommand<object>(LoadSavedTestSuite);
         }
 
         private ObservableCollection<TestCase> _testCaseCollection = new();
@@ -22,16 +23,16 @@ namespace TestCaseExecutor.ViewModels
         public ObservableCollection<TestCase> TestCaseCollection
         {
             get => _testCaseCollection;
-            set 
-            { 
+            set
+            {
                 _testCaseCollection = value;
                 OnPropertyChanged();
             }
         }
 
         public ICommand BtnLoadCSVFile { get; private set; }
-
-        public ICommand BtnSaveCSVFile { get; private set; }
+        public ICommand BtnSaveCurrentTestSuite { get; private set; }
+        public ICommand BtnLoadSavedTestSuite { get; private set; }
 
         public bool CheckBoxClicked
         {
@@ -51,29 +52,41 @@ namespace TestCaseExecutor.ViewModels
             {
                 Filter = "CSV files (*.csv)|*.csv",
                 Title = "Open CSV file"
-            };       
-            
+            };
+
             if (ofd.ShowDialog() == true)
             {
                 TestCaseCollection = new ObservableCollection<TestCase>(load.LoadCSVFile(ofd.FileName));
             }
         }
 
-        private void SaveCSVFile(object obj)
+        private void SaveCurrentTestSuite(object obj)
         {
-            SaveCSVFile saveCSVFile = new();
             SaveFileDialog saveFileDialog = new()
             {
-                Filter = "CSV files (*.csv)|*.csv"
+                Filter = "JSON files (*.json)|*.json"
             };
 
             if (saveFileDialog.ShowDialog() == true)
             {
                 var fileName = saveFileDialog.FileName;
-                if (saveCSVFile.ExportCSVFile(fileName))
-                {
-                    ShowNotification("Success", "CSV saved successfully.", NotificationType.Success);
-                }
+                SaveAndLoadTestData.SaveTestDataFile(fileName, TestCaseCollection);
+
+                ShowNotification("Success", "Current test suite saved successfully.", NotificationType.Success);
+            }
+        }
+
+        private void LoadSavedTestSuite(object obj)
+        {
+            OpenFileDialog ofd = new()
+            {
+                Filter = "JSON files (*.json)|*.json",
+                Title = "Open JSON file"
+            };
+
+            if (ofd.ShowDialog() == true)
+            {
+                TestCaseCollection = new ObservableCollection<TestCase>(SaveAndLoadTestData.LoadTestDataFile(ofd.FileName));
             }
         }
     }

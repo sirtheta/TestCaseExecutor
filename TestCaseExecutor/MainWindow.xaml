@@ -27,15 +27,21 @@
                 <ColumnDefinition Width="17*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="1">
-                <Button Content="{materialDesign:PackIcon Kind=OpenInApp,Size=30}"    
+                <Button Content="{materialDesign:PackIcon Kind=FileDelimited,Size=30}"    
                         Command="{Binding BtnLoadCSVFile}" 
                         Margin="0,10,5,0" 
                         HorizontalAlignment="Right" 
                         FontSize="25" Height="30" 
                         Width="30" 
                         Padding="0"/>
+                <Button Content="{materialDesign:PackIcon Kind=TrayArrowDown,Size=30}"
+                        Command="{Binding BtnLoadSavedTestSuite}"     
+                        Margin="0,10,5,0" 
+                        HorizontalAlignment="Right" 
+                        FontSize="25" Height="30" Width="30" 
+                        Padding="0"/>
                 <Button Content="{materialDesign:PackIcon Kind=ContentSave,Size=30}"
-                        Command="{Binding BtnSaveCSVFile}"     
+                        Command="{Binding BtnSaveCurrentTestSuite}"     
                         Margin="0,10,5,0" 
                         HorizontalAlignment="Right" 
                         FontSize="25" Height="30" Width="30" 

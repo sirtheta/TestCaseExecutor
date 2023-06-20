@@ -1,13 +1,9 @@
 ﻿using CsvHelper.Configuration.Attributes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TestCaseExecutor.MainClasses
 {
-    internal class CSVMapping
+    internal class ImportCSVMapping
     {
         [Index(0)]
         public string? ID { get; set; }
@@ -19,5 +15,7 @@ namespace TestCaseExecutor.MainClasses
         public string? StepAction { get; set; }
         [Index(5)]
         public string? StepExpected { get; set; }
+        public bool TestResult { get; set; } = false;
+
     }
 }

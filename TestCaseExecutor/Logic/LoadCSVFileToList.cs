@@ -1,7 +1,6 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -13,8 +12,7 @@ namespace TestCaseExecutor.Logic
     {
         internal IList<TestCase> LoadCSVFile(string fileName)
         {
-            List<CSVMapping> csvMapping = new();
-            List<TestCase> testCases = new();
+            List<ImportCSVMapping> csvMapping = new();
             using var reader = new StreamReader(fileName);
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
@@ -26,10 +24,11 @@ namespace TestCaseExecutor.Logic
                 csv.ReadHeader();
                 while (csv.Read())
                 {
-                    csvMapping.Add(csv.GetRecord<CSVMapping>()!);
+                    csvMapping.Add(csv.GetRecord<ImportCSVMapping>()!);
                 }
             }
 
+            List<TestCase> testCases = new();
             foreach (var mapping in csvMapping)
             {
                 // Check if it's a TestCase object
@@ -45,7 +44,7 @@ namespace TestCaseExecutor.Logic
                     testCases.Add(testCase);
                 }
                 // Check if it's a TestStep object
-                else if (mapping.ID == string.Empty &&mapping.TestStep != string.Empty )
+                else if (mapping.ID == string.Empty && mapping.TestStep != string.Empty)
                 {
                     var testStep = new TestStep
                     {
