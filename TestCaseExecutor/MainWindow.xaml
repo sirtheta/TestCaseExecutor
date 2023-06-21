@@ -69,6 +69,12 @@
                                             Margin="10,0,10,0"/>
                                     <Label Content="{Binding ID}" FontSize="22" FontWeight="Bold" Margin="0,0,0,0" VerticalAlignment="Center"/>
                                     <TextBlock Text="{Binding Title}" Margin="10,0,0,10" TextWrapping="Wrap" VerticalAlignment="Center" Width="550" FontSize="22" FontWeight="Bold" />
+                                    <Button Content="{materialDesign:PackIcon Kind=BookmarkCheckOutline,Size=30}"                                            
+                                            Visibility="{Binding AllTestStepsExecuted, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            Margin="10,10,5,0" 
+                                            HorizontalAlignment="Right" 
+                                            FontSize="25" Height="30" Width="30" 
+                                            Padding="0"/>
                                 </StackPanel>
                                 <ItemsControl ItemsSource="{Binding Path=TestSteps}" Visibility="{Binding IsExpanded, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <ItemsControl.ItemTemplate>

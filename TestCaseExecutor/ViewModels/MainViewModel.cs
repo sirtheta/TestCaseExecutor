@@ -43,7 +43,7 @@ namespace TestCaseExecutor.ViewModels
                 _checkBoxClicked = value;
                 OnPropertyChanged();
             }
-        }
+        }        
 
         // Import the testsuite from a csv file
         private void LoadCSVFile(object obj)

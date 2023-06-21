@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using TestCaseExecutor.Commands;
@@ -16,6 +17,7 @@ namespace TestCaseExecutor.MainClasses
         public List<TestStep> TestSteps { get; set; } = new List<TestStep>();
 
         private bool _isExpanded = false;
+        private bool _allTestStepsExecuted = false;
 
         public TestCase()
         {
@@ -24,12 +26,27 @@ namespace TestCaseExecutor.MainClasses
 
         public bool IsExpanded
         {
-            get { return _isExpanded; }
+            get => _isExpanded; 
             set
             {
                 _isExpanded = value;
                 OnPropertyChanged();
             }
+        }
+
+        public bool AllTestStepsExecuted
+        {
+            get => _allTestStepsExecuted;
+            set
+            {
+                _allTestStepsExecuted = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool AllCheckBoxesClicked()
+        {
+            return TestSteps.All(step => step.CheckBoxClicked);
         }
 
         // command to toggle the expand of the testcase
