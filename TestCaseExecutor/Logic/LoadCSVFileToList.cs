@@ -1,7 +1,6 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -48,7 +47,7 @@ namespace TestCaseExecutor.Logic
 
                     testCases.Add(testCase);
                 }
-                // Check if it's a TestStep object
+                // Check if it's a TestStep object, if it is not a testcas, ist should always be a testStep...
                 else if (mapping.ID == string.Empty && mapping.TestStep != string.Empty)
                 {
                     var testStep = new TestStep

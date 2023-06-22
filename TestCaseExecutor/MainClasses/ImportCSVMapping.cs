@@ -18,7 +18,5 @@ namespace TestCaseExecutor.MainClasses
         public string? StepAction { get; set; }
         [Index(5)]
         public string? StepExpected { get; set; }
-        public bool TestResult { get; set; } = false;
-
     }
 }

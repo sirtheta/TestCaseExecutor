@@ -9,12 +9,12 @@ using TestCaseExecutor.MainClasses;
 namespace TestCaseExecutor.ViewModels
 {
     internal class MainViewModel : BaseViewModel
-    {      
+    {
         public MainViewModel()
         {
             BtnLoadCSVFile = new RelayCommand<object>(LoadCSVFile);
             BtnSaveCurrentTestSuite = new RelayCommand<object>(SaveCurrentTestSuite);
-            BtnLoadSavedTestSuite = new RelayCommand<object>(LoadSavedTestSuite);            
+            BtnLoadSavedTestSuite = new RelayCommand<object>(LoadSavedTestSuite);
         }
 
         private ObservableCollection<TestCase> _testCaseCollection = new();
@@ -29,15 +29,18 @@ namespace TestCaseExecutor.ViewModels
             }
         }
 
+        private string? FileExportPath { get; set; } = null;
+
         public ICommand BtnLoadCSVFile { get; private set; }
         public ICommand BtnSaveCurrentTestSuite { get; private set; }
         public ICommand BtnLoadSavedTestSuite { get; private set; }
-    
+
 
         // Import the testsuite from a csv file
         private void LoadCSVFile(object obj)
         {
-            LoadCSVFileToList load = new();
+            // set to null, needs new confirmation for saving
+            FileExportPath = null;
             OpenFileDialog ofd = new()
             {
                 Filter = "CSV files (*.csv)|*.csv",
@@ -66,18 +69,30 @@ namespace TestCaseExecutor.ViewModels
                 Filter = "JSON files (*.json)|*.json"
             };
 
-            if (saveFileDialog.ShowDialog() == true)
+            // if the file is not saved until now, store the file path for later
+            if (FileExportPath == null && saveFileDialog.ShowDialog() == true)
             {
                 var fileName = saveFileDialog.FileName;
-                SaveAndLoadTestData.SaveTestDataFile(fileName, TestCaseCollection);
+                FileExportPath = fileName;
+            }
 
+            if (FileExportPath != null)
+            {
+                SaveAndLoadTestData.SaveTestDataFile(FileExportPath, TestCaseCollection);
                 ShowNotification("Success", "Current test suite saved successfully.", NotificationType.Success);
+            }
+            else
+            {
+                ShowNotification("Error", "Error saving test suite.", NotificationType.Success);
             }
         }
 
         // Load saved test suite from JSON
         private void LoadSavedTestSuite(object obj)
         {
+            // set to null, needs new confirmation for saving
+            FileExportPath = null;
+
             OpenFileDialog ofd = new()
             {
                 Filter = "JSON files (*.json)|*.json",
@@ -89,6 +104,10 @@ namespace TestCaseExecutor.ViewModels
                 try
                 {
                     TestCaseCollection = new ObservableCollection<TestCase>(SaveAndLoadTestData.LoadTestDataFile(ofd.FileName));
+                    foreach (var testCase in TestCaseCollection)
+                    {
+                        testCase.UpdateStates();
+                    }
                     ShowNotification("Success", "Test suite successfully loaded.", NotificationType.Success);
                 }
                 catch (System.Exception)

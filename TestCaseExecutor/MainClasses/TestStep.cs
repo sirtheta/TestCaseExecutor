@@ -1,37 +1,92 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.Windows.Input;
+using System.Windows.Media;
+using TestCaseExecutor.Commands;
 using TestCaseExecutor.Common;
 
 namespace TestCaseExecutor.MainClasses
 {
+    /// <summary>
+    /// Class for each test step in a testcase
+    /// </summary>
     internal class TestStep : Notify
     {
-        /// <summary>
-        /// Class for each test step in a testcase
-        /// </summary>
+        internal TestStep()
+        {
+            BtnTestStepSuccess = new RelayCommand<object>(BtnTestStepSuccessExecute);
+            BtnTestStepFailed = new RelayCommand<object>(BtnTestStepFailedExecute);
+        }
+
         public string? TestStepID { get; set; }
         public string? StepAction { get; set; }
         public string? StepExpected { get; set; }
-       
-        private bool _checkBoxClicked = false;
+        public bool TestStepSuccess { get; set; } = false;
 
-        public bool CheckBoxClicked
+        // ignore buttons for JSON export
+        [JsonIgnore]
+        public ICommand BtnTestStepFailed { get; private set; }
+        [JsonIgnore]
+        public ICommand BtnTestStepSuccess { get; private set; }
+
+        internal event EventHandler? TestStepStatusChanged;
+
+        protected virtual void OnTestStepStatusChanged()
         {
-            get => _checkBoxClicked;
+            TestStepStatusChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private Brush _btnSuccessColor = Brushes.Gray;
+        [JsonIgnore]
+        public Brush BtnSuccessColor
+        {
+            get => _btnSuccessColor;
             set
             {
-                if (_checkBoxClicked != value)
-                {
-                    _checkBoxClicked = value;
-                    OnCheckBoxClickedChanged();
-                }
+                _btnSuccessColor = value;
+                OnPropertyChanged();
             }
         }
 
-        public event EventHandler? CheckBoxClickedChanged;
-
-        protected virtual void OnCheckBoxClickedChanged()
+        private Brush _btnFailedColor = Brushes.Gray;
+        [JsonIgnore]
+        public Brush BtnFailedColor
         {
-            CheckBoxClickedChanged?.Invoke(this, EventArgs.Empty);
+            get => _btnFailedColor;
+            set
+            {
+                _btnFailedColor = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private void BtnTestStepSuccessExecute(object? obj)
+        {
+            BtnSuccessColor = Brushes.Green;
+            BtnFailedColor = Brushes.Gray;
+            TestStepSuccess = true;
+            OnTestStepStatusChanged();
+        }
+
+        private void BtnTestStepFailedExecute(object? obj)
+        {
+            BtnFailedColor = Brushes.Red;
+            BtnSuccessColor = Brushes.Gray;
+            TestStepSuccess = false;
+            OnTestStepStatusChanged();
+        }
+
+        internal void UpdateTestStepState()
+        {
+            if (TestStepSuccess)
+            {
+                BtnTestStepSuccessExecute(null);
+            }
+            else
+            {
+                BtnTestStepFailedExecute(null);
+
+            }
         }
     }
 }

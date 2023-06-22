@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MaterialDesignThemes.Wpf;
+using Newtonsoft.Json;
+using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Windows.Input;
+using System.Windows.Media;
 using TestCaseExecutor.Commands;
 using TestCaseExecutor.Common;
 
@@ -19,47 +21,50 @@ namespace TestCaseExecutor.MainClasses
         public ObservableCollection<TestStep> TestSteps { get; set; } = new();
 
         private bool _isExpanded = false;
-        private bool _allTestStepsExecuted = false;
 
         public TestCase()
         {
             ToggleExpandCommand = new RelayCommand<object>(ToggleExpand);
+            // add observer for the collection of the test steps to get notified if a test step is executed
             ((INotifyCollectionChanged)TestSteps).CollectionChanged += TestStepsCollectionChanged;
         }
 
+        // handles the notification of the test steps
         private void TestStepsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
                 foreach (var newTestStep in e.NewItems?.OfType<TestStep>() ?? Enumerable.Empty<TestStep>())
                 {
-                    newTestStep.CheckBoxClickedChanged += TestStepCheckBoxClickedChanged;
+                    newTestStep.TestStepStatusChanged += TestStepSuccessOrFailedButtonClick;
                 }
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)
             {
                 foreach (var oldTestStep in e.OldItems?.OfType<TestStep>() ?? Enumerable.Empty<TestStep>())
                 {
-                    oldTestStep.CheckBoxClickedChanged -= TestStepCheckBoxClickedChanged;
+                    oldTestStep.TestStepStatusChanged -= TestStepSuccessOrFailedButtonClick;
                 }
             }
         }
 
-        private void TestStepCheckBoxClickedChanged(object? sender, EventArgs e)
+        // 
+        private void TestStepSuccessOrFailedButtonClick(object? sender, EventArgs e)
         {
-            if (AllCheckBoxesClicked)
+            if (TestSteps.All(step => step.TestStepSuccess))
             {
-                AllTestStepsExecuted = true;
+                ChangeIconAndColorOfTestStepSuccessState(true);
             }
             else
             {
-                AllTestStepsExecuted = false;
+                ChangeIconAndColorOfTestStepSuccessState(false);
             }
         }
 
+        [JsonIgnore]
         public bool IsExpanded
         {
-            get => _isExpanded; 
+            get => _isExpanded;
             set
             {
                 _isExpanded = value;
@@ -67,26 +72,51 @@ namespace TestCaseExecutor.MainClasses
             }
         }
 
-        public bool AllTestStepsExecuted
-        {
-            get => _allTestStepsExecuted;
-            set
-            {
-                _allTestStepsExecuted = value;
-                OnPropertyChanged();
-            }
-        }
-        public bool AllCheckBoxesClicked => TestSteps.All(step => step.CheckBoxClicked);
-
         // command to toggle the expand of the testcase
-        public ICommand ToggleExpandCommand
-        {
-            get;
-        }
+        [JsonIgnore]
+        public ICommand ToggleExpandCommand { get; }
 
         private void ToggleExpand(object obj)
         {
             IsExpanded = !IsExpanded;
+        }
+
+        private Brush _allTestStepSuccessStateColor = Brushes.Gray;
+        [JsonIgnore]
+        public Brush AllTestStepSuccessStateColor
+        {
+            get => _allTestStepSuccessStateColor;
+            set
+            {
+                _allTestStepSuccessStateColor = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private PackIconKind _allTestStepSuccessStateIcon = PackIconKind.Arrow;
+        [JsonIgnore]
+        public PackIconKind AllTestStepSuccessStateIcon
+        {
+            get => _allTestStepSuccessStateIcon;
+            set
+            {
+                _allTestStepSuccessStateIcon = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private void ChangeIconAndColorOfTestStepSuccessState(bool success)
+        {
+            AllTestStepSuccessStateColor = success ? Brushes.Green : Brushes.Red;
+            AllTestStepSuccessStateIcon = success ? PackIconKind.Check : PackIconKind.Close;
+        }
+
+        internal void UpdateStates()
+        {
+            foreach (var item in TestSteps)
+            {
+                item.UpdateTestStepState();
+            }
         }
     }
 }
