@@ -1,20 +1,22 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using TestCaseExecutor.Commands;
+using TestCaseExecutor.Common;
 
 namespace TestCaseExecutor.MainClasses
 {
     /// <summary>
     /// Class for the testcases
     /// </summary>
-    internal class TestCase : INotifyPropertyChanged
+    internal class TestCase : Notify
     {
         public string? ID { get; set; }
         public string? Title { get; set; }
-        public List<TestStep> TestSteps { get; set; } = new List<TestStep>();
+        public ObservableCollection<TestStep> TestSteps { get; set; } = new();
 
         private bool _isExpanded = false;
         private bool _allTestStepsExecuted = false;
@@ -22,6 +24,37 @@ namespace TestCaseExecutor.MainClasses
         public TestCase()
         {
             ToggleExpandCommand = new RelayCommand<object>(ToggleExpand);
+            ((INotifyCollectionChanged)TestSteps).CollectionChanged += TestStepsCollectionChanged;
+        }
+
+        private void TestStepsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                foreach (var newTestStep in e.NewItems?.OfType<TestStep>() ?? Enumerable.Empty<TestStep>())
+                {
+                    newTestStep.CheckBoxClickedChanged += TestStepCheckBoxClickedChanged;
+                }
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                foreach (var oldTestStep in e.OldItems?.OfType<TestStep>() ?? Enumerable.Empty<TestStep>())
+                {
+                    oldTestStep.CheckBoxClickedChanged -= TestStepCheckBoxClickedChanged;
+                }
+            }
+        }
+
+        private void TestStepCheckBoxClickedChanged(object? sender, EventArgs e)
+        {
+            if (AllCheckBoxesClicked)
+            {
+                AllTestStepsExecuted = true;
+            }
+            else
+            {
+                AllTestStepsExecuted = false;
+            }
         }
 
         public bool IsExpanded
@@ -43,11 +76,7 @@ namespace TestCaseExecutor.MainClasses
                 OnPropertyChanged();
             }
         }
-
-        public bool AllCheckBoxesClicked()
-        {
-            return TestSteps.All(step => step.CheckBoxClicked);
-        }
+        public bool AllCheckBoxesClicked => TestSteps.All(step => step.CheckBoxClicked);
 
         // command to toggle the expand of the testcase
         public ICommand ToggleExpandCommand
@@ -58,13 +87,6 @@ namespace TestCaseExecutor.MainClasses
         private void ToggleExpand(object obj)
         {
             IsExpanded = !IsExpanded;
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

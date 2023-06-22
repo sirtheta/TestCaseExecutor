@@ -1,6 +1,7 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace TestCaseExecutor.Logic
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        internal IList<TestCase> LoadCSVFile(string fileName)
+        internal static IList<TestCase> LoadCSVFile(string fileName)
         {
             List<ImportCSVMapping> csvMapping = new();
             using var reader = new StreamReader(fileName);
@@ -42,8 +43,7 @@ namespace TestCaseExecutor.Logic
                     var testCase = new TestCase
                     {
                         ID = mapping.ID,
-                        Title = mapping.Title,
-                        TestSteps = new List<TestStep>()
+                        Title = mapping.Title
                     };
 
                     testCases.Add(testCase);

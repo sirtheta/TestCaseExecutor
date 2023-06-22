@@ -9,16 +9,15 @@ using TestCaseExecutor.MainClasses;
 namespace TestCaseExecutor.ViewModels
 {
     internal class MainViewModel : BaseViewModel
-    {
+    {      
         public MainViewModel()
         {
             BtnLoadCSVFile = new RelayCommand<object>(LoadCSVFile);
             BtnSaveCurrentTestSuite = new RelayCommand<object>(SaveCurrentTestSuite);
-            BtnLoadSavedTestSuite = new RelayCommand<object>(LoadSavedTestSuite);
+            BtnLoadSavedTestSuite = new RelayCommand<object>(LoadSavedTestSuite);            
         }
 
         private ObservableCollection<TestCase> _testCaseCollection = new();
-        private bool _checkBoxClicked;
 
         public ObservableCollection<TestCase> TestCaseCollection
         {
@@ -33,17 +32,7 @@ namespace TestCaseExecutor.ViewModels
         public ICommand BtnLoadCSVFile { get; private set; }
         public ICommand BtnSaveCurrentTestSuite { get; private set; }
         public ICommand BtnLoadSavedTestSuite { get; private set; }
-
-        // gets or sets the checkbox for each teststep
-        public bool CheckBoxClicked
-        {
-            get => _checkBoxClicked;
-            set
-            {
-                _checkBoxClicked = value;
-                OnPropertyChanged();
-            }
-        }        
+    
 
         // Import the testsuite from a csv file
         private void LoadCSVFile(object obj)
@@ -59,7 +48,7 @@ namespace TestCaseExecutor.ViewModels
             {
                 try
                 {
-                    TestCaseCollection = new ObservableCollection<TestCase>(load.LoadCSVFile(ofd.FileName));
+                    TestCaseCollection = new ObservableCollection<TestCase>(LoadCSVFileToList.LoadCSVFile(ofd.FileName));
                     ShowNotification("Success", "Test suite successfully imported.", NotificationType.Success);
                 }
                 catch (System.Exception)
