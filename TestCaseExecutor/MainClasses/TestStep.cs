@@ -22,6 +22,7 @@ namespace TestCaseExecutor.MainClasses
         public string? StepAction { get; set; }
         public string? StepExpected { get; set; }
         public bool TestStepSuccess { get; set; } = false;
+        public bool TestStepExecuted { get; set; } = false; 
 
         // ignore buttons for JSON export
         [JsonIgnore]
@@ -65,6 +66,7 @@ namespace TestCaseExecutor.MainClasses
             BtnSuccessColor = Brushes.Green;
             BtnFailedColor = Brushes.Gray;
             TestStepSuccess = true;
+            TestStepExecuted = true;
             OnTestStepStatusChanged();
         }
 
@@ -73,19 +75,23 @@ namespace TestCaseExecutor.MainClasses
             BtnFailedColor = Brushes.Red;
             BtnSuccessColor = Brushes.Gray;
             TestStepSuccess = false;
+            TestStepExecuted = true;
             OnTestStepStatusChanged();
         }
 
+        /// <summary>
+        /// updatemethod for the state if the user loads the saved JSON file
+        /// only run the executon method if the step was executed previously
+        /// </summary>        
         internal void UpdateTestStepState()
-        {
-            if (TestStepSuccess)
+        {            
+            if (TestStepExecuted && TestStepSuccess)
             {
                 BtnTestStepSuccessExecute(null);
             }
-            else
+            else if (TestStepExecuted)
             {
                 BtnTestStepFailedExecute(null);
-
             }
         }
     }
