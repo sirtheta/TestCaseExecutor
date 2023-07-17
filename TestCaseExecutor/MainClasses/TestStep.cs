@@ -21,6 +21,7 @@ namespace TestCaseExecutor.MainClasses
         public string? TestStepID { get; set; }
         public string? StepAction { get; set; }
         public string? StepExpected { get; set; }
+        public string? AdditionalUserText { get; set; }
         public bool TestStepSuccess { get; set; } = false;
         public bool TestStepExecuted { get; set; } = false; 
 

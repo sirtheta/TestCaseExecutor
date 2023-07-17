@@ -83,7 +83,7 @@ namespace TestCaseExecutor.ViewModels
             }
             else
             {
-                ShowNotification("Error", "Error saving test suite.", NotificationType.Success);
+                ShowNotification("Error", "Error saving test suite.", NotificationType.Error);
             }
         }
 

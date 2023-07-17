@@ -10,7 +10,7 @@
         xmlns:helper="clr-namespace:TestCaseExecutor.Helpers"
         d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
         mc:Ignorable="d"
-        Title="TestCaseExecutor" Height="850" Width="1080">
+        Title="TestCaseExecutor" Height="850" Width="1100">
     <Window.Resources>
         <helper:ExpandButtonContentConverter x:Key="ExpandButtonContentConverter" />
     </Window.Resources>
@@ -35,14 +35,14 @@
                         FontSize="25" Height="30" 
                         Width="30" 
                         Padding="0"/>
-                
+
                 <Button Content="{materialDesign:PackIcon Kind=TrayArrowDown, Size=30}"
                         Command="{Binding BtnLoadSavedTestSuite}"     
                         Margin="0,10,5,0" 
                         HorizontalAlignment="Right" 
                         FontSize="25" Height="30" Width="30" 
                         Padding="0"/>
-                
+
                 <Button Content="{materialDesign:PackIcon Kind=ContentSave, Size=30}"
                         Command="{Binding BtnSaveCurrentTestSuite}"     
                         Margin="0,10,5,0" 
@@ -70,13 +70,13 @@
                                             Command="{Binding ToggleExpandCommand}" 
                                             CommandParameter="{Binding}" 
                                             Margin="10,0,10,0"/>
-                                    
+
                                     <Label Content="{Binding ID}" 
                                            FontSize="22" 
                                            FontWeight="Bold" 
                                            Margin="0,0,0,0" 
                                            VerticalAlignment="Center"/>
-                                    
+
                                     <TextBlock Text="{Binding Title}" 
                                                Margin="10,0,0,10" 
                                                TextWrapping="Wrap" 
@@ -84,14 +84,14 @@
                                                Width="550" 
                                                FontSize="22" 
                                                FontWeight="Bold" />
-                                    
+
                                     <Border Width="30" 
                                             Height="30" 
                                             Background="{Binding AllTestStepSuccessStateColor}" 
                                             CornerRadius="15" 
                                             HorizontalAlignment="Right"
                                             Margin="0,0,20,0">
-                                        
+
                                         <materialDesign:PackIcon Kind="{Binding AllTestStepSuccessStateIcon}" 
                                                                  Foreground="Black" 
                                                                  HorizontalAlignment="Center" 
@@ -100,79 +100,125 @@
                                                                  Height="30"/>
                                     </Border>
                                 </DockPanel>
-                                <ItemsControl ItemsSource="{Binding Path=TestSteps}" 
-                                              Visibility="{Binding IsExpanded, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <DockPanel>
-                                                <DockPanel.Style>
-                                                    <Style TargetType="DockPanel">
-                                                        <Setter Property="Background" 
-                                                                Value="Transparent" />
-                                                        <Style.Triggers>
-                                                            <Trigger Property="IsMouseOver" 
-                                                                     Value="True">
-                                                                <Setter Property="Background"
-                                                                        Value="WhiteSmoke" />
-                                                            </Trigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </DockPanel.Style>
-                                                <StackPanel Orientation="Horizontal" 
-                                                            Margin="20,0,0,0">
-                                                    <Grid>
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="25"></ColumnDefinition>
-                                                            <ColumnDefinition Width="400"></ColumnDefinition>
-                                                            <ColumnDefinition Width="400"></ColumnDefinition>
-                                                            <ColumnDefinition Width="*"></ColumnDefinition>
-                                                        </Grid.ColumnDefinitions>
-                                                        <Label Grid.Column="0" 
-                                                               Content="{Binding TestStepID}" 
-                                                               VerticalAlignment="Center" 
-                                                               Margin="0,0,10,0"/>
-                                                        
-                                                        <TextBlock Grid.Column="1" 
-                                                                   Text="{Binding StepAction}" 
-                                                                   TextWrapping="Wrap" 
-                                                                   VerticalAlignment="Center" />
-                                                        
-                                                        <TextBlock Grid.Column="2" 
-                                                                   Text="{Binding StepExpected}" 
-                                                                   TextWrapping="Wrap" 
-                                                                   VerticalAlignment="Center" />
-                                                        
-                                                        <StackPanel Grid.Column="3" 
-                                                                    Orientation="Horizontal"
-                                                                    Margin="10,0,5,0" >
+                                <StackPanel Visibility="{Binding IsExpanded, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="25"></ColumnDefinition>
+                                                <ColumnDefinition Width="300"></ColumnDefinition>
+                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                <ColumnDefinition Width="200"></ColumnDefinition>
+                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                <ColumnDefinition Width="250"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
 
-                                                            <Button  Content="{materialDesign:PackIcon Kind=Check, Size=25}"
-                                                                    Command="{Binding BtnTestStepSuccess}" 
-                                                                    materialDesign:ButtonAssist.CornerRadius="15"                                                                    
-                                                                    HorizontalAlignment="Right"
-                                                                    FontSize="25" 
-                                                                    Height="30" 
-                                                                    Width="30" 
-                                                                    Padding="0"
-                                                                    Background="{Binding BtnSuccessColor}"/>
+                                            <TextBlock Grid.Column="1" 
+                                                       HorizontalAlignment="Center" 
+                                                       Text="Testbeschreibung" 
+                                                       TextWrapping="Wrap" 
+                                                       Margin="0,0,0,10"
+                                                       FontSize="15"
+                                                       FontWeight="Bold"/>
+
+                                            <TextBlock Grid.Column="3" 
+                                                       HorizontalAlignment="Center" 
+                                                       Text="Erwartetes Ergebnis"                                                        
+                                                       TextWrapping="Wrap" 
+                                                       Margin="0,0,0,10"
+                                                       FontSize="15"
+                                                       FontWeight="Bold"/>
+                                            
+                                            <TextBlock Grid.Column="5" 
+                                                       HorizontalAlignment="Center" 
+                                                       Text="Benutzertext"                                                        
+                                                       TextWrapping="Wrap" 
+                                                       Margin="0,0,0,10"
+                                                       FontSize="15"
+                                                       FontWeight="Bold"/>
+                                        </Grid>
+                                    </StackPanel>
+                                    <ItemsControl ItemsSource="{Binding Path=TestSteps}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <DockPanel>
+                                                    <DockPanel.Style>
+                                                        <Style TargetType="DockPanel">
+                                                            <Setter Property="Background" Value="Transparent" />
+                                                            <Style.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="Background" Value="WhiteSmoke" />
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </DockPanel.Style>
+                                                    <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="25"></ColumnDefinition>
+                                                                <ColumnDefinition Width="300"></ColumnDefinition>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                                <ColumnDefinition Width="200"></ColumnDefinition>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                                <ColumnDefinition Width="250"></ColumnDefinition>
+                                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <Label Grid.Column="0" 
+                                                                   Content="{Binding TestStepID}" 
+                                                                   VerticalAlignment="Center" 
+                                                                   Margin="0,0,10,0"/>
+
+                                                            <TextBlock Grid.Column="1" 
+                                                                       Text="{Binding StepAction}" 
+                                                                       TextWrapping="Wrap" 
+                                                                       VerticalAlignment="Center" />
+
+                                                            <GridSplitter Grid.Column="2" Width="1" VerticalAlignment="Stretch" Background="Black" Margin="5" />
+
+                                                            <TextBlock Grid.Column="3" 
+                                                                       Text="{Binding StepExpected}" 
+                                                                       TextWrapping="Wrap" 
+                                                                       VerticalAlignment="Center" />
                                                             
-                                                            <Button Content="{materialDesign:PackIcon Kind=Close, Size=25}"
-                                                                    Command="{Binding BtnTestStepFailed}" 
-                                                                    materialDesign:ButtonAssist.CornerRadius="15"                                                                    
-                                                                    HorizontalAlignment="Right" 
-                                                                    FontSize="25" 
-                                                                    Height="30" 
-                                                                    Width="30" 
-                                                                    Padding="0"
-                                                                    Margin="10"
-                                                                    Background="{Binding BtnFailedColor}"/>
-                                                        </StackPanel>
-                                                    </Grid>
-                                                </StackPanel>
-                                            </DockPanel>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
+                                                            <GridSplitter Grid.Column="4" Width="1" VerticalAlignment="Stretch" Background="Black" Margin="5" />
+                                                            
+                                                            <TextBox Grid.Column="5"
+                                                                     Text="{Binding AdditionalUserText}"
+                                                                     TextWrapping="Wrap"
+                                                                     TextAlignment="Left"/>
+
+                                                            <StackPanel Grid.Column="6" 
+                                                                        Orientation="Horizontal"
+                                                                        Margin="10,0,5,0"
+                                                                        HorizontalAlignment="Right">
+
+                                                                <Button  Content="{materialDesign:PackIcon Kind=Check, Size=25}"
+                                                                         Command="{Binding BtnTestStepSuccess}" 
+                                                                         materialDesign:ButtonAssist.CornerRadius="15"
+                                                                         FontSize="25" 
+                                                                         Height="30" 
+                                                                         Width="30" 
+                                                                         Padding="0"
+                                                                         Background="{Binding BtnSuccessColor}"/>
+
+                                                                <Button Content="{materialDesign:PackIcon Kind=Close, Size=25}"
+                                                                        Command="{Binding BtnTestStepFailed}" 
+                                                                        materialDesign:ButtonAssist.CornerRadius="15"
+                                                                        FontSize="25" 
+                                                                        Height="30" 
+                                                                        Width="30" 
+                                                                        Padding="0"
+                                                                        Margin="10"
+                                                                        Background="{Binding BtnFailedColor}"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </StackPanel>
+                                                </DockPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
                             </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
