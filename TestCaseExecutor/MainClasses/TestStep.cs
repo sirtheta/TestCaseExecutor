@@ -12,6 +12,7 @@ namespace TestCaseExecutor.MainClasses
     /// </summary>
     internal class TestStep : Notify
     {
+
         internal TestStep()
         {
             BtnTestStepSuccess = new RelayCommand<object>(BtnTestStepSuccessExecute);
@@ -21,15 +22,31 @@ namespace TestCaseExecutor.MainClasses
         public string? TestStepID { get; set; }
         public string? StepAction { get; set; }
         public string? StepExpected { get; set; }
-        public string? AdditionalUserText { get; set; }
+        public string? AdditionalUserText
+        {
+            get => _additionalUserText;
+            set
+            {
+                _additionalUserText = value;
+                AdditionalUserTextChanged = true;
+                OnPropertyChanged();
+            }
+        }
         public bool TestStepSuccess { get; set; } = false;
-        public bool TestStepExecuted { get; set; } = false; 
+        public bool TestStepExecuted { get; set; } = false;
+
+        private string? _additionalUserText;
 
         // ignore buttons for JSON export
         [JsonIgnore]
         public ICommand BtnTestStepFailed { get; private set; }
+
         [JsonIgnore]
         public ICommand BtnTestStepSuccess { get; private set; }
+
+        // used to detect if a user has changed some text. 
+        [JsonIgnore]
+        internal bool AdditionalUserTextChanged { get; set; } = false;
 
         internal event EventHandler? TestStepStatusChanged;
 
@@ -85,7 +102,7 @@ namespace TestCaseExecutor.MainClasses
         /// only run the executon method if the step was executed previously
         /// </summary>        
         internal void UpdateTestStepState()
-        {            
+        {
             if (TestStepExecuted && TestStepSuccess)
             {
                 BtnTestStepSuccessExecute(null);

@@ -18,6 +18,7 @@ namespace TestCaseExecutor.ViewModels
         }
 
         private ObservableCollection<TestCase> _testCaseCollection = new();
+        private System.Threading.Timer? autosaveTimer;
 
         public ObservableCollection<TestCase> TestCaseCollection
         {
@@ -25,6 +26,7 @@ namespace TestCaseExecutor.ViewModels
             set
             {
                 _testCaseCollection = value;
+                InitializeTimer();
                 OnPropertyChanged();
             }
         }
@@ -35,6 +37,46 @@ namespace TestCaseExecutor.ViewModels
         public ICommand BtnSaveCurrentTestSuite { get; private set; }
         public ICommand BtnLoadSavedTestSuite { get; private set; }
 
+        private readonly int _timerInterval = 10000;
+
+        /// <summary>
+        /// Initializing the timer for autosave
+        /// </summary>
+        private void InitializeTimer()
+        {
+            autosaveTimer = new System.Threading.Timer(AutosaveCallback, null, _timerInterval, System.Threading.Timeout.Infinite);
+        }
+
+        /// <summary>
+        /// Callback for the autosave method. 
+        /// </summary>
+        /// <param name="state"></param>
+        private void AutosaveCallback(object? state)
+        {
+            bool anyChangesDetected = false;
+
+            // Iterate through test cases and test steps to check for changes
+            foreach (var testCase in TestCaseCollection)
+            {
+                foreach (var testStep in testCase.TestSteps)
+                {
+                    if (FileExportPath != null && testStep.AdditionalUserTextChanged)
+                    {
+                        anyChangesDetected = true;
+                        testStep.AdditionalUserTextChanged = false;
+                    }
+                }
+            }
+
+            // Save the data if any changes were detected
+            if (anyChangesDetected)
+            {
+                SaveCurrentTestSuite(null); // Save all the necessary data
+            }
+
+            // Restart the timer to run again after the specified interval
+            autosaveTimer?.Change(_timerInterval, System.Threading.Timeout.Infinite);
+        }
 
         // Import the testsuite from a csv file
         private void LoadCSVFile(object obj)
@@ -62,7 +104,7 @@ namespace TestCaseExecutor.ViewModels
         }
 
         // save current state of testsuite to JSON
-        private void SaveCurrentTestSuite(object obj)
+        private void SaveCurrentTestSuite(object? obj)
         {
             SaveFileDialog saveFileDialog = new()
             {
@@ -88,7 +130,7 @@ namespace TestCaseExecutor.ViewModels
         }
 
         // Load saved test suite from JSON
-        private void LoadSavedTestSuite(object obj)
+        private void LoadSavedTestSuite(object? obj)
         {
             // set to null, needs new confirmation for saving
             FileExportPath = null;

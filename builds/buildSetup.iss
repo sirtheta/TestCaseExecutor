@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "TestCaseExecutor"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.1.0"
 #define MyAppPublisher "Nemicomp"
 #define MyAppURL "https://www.nemicomp.ch/"
 #define MyAppExeName "TestCaseExecutor.exe"
@@ -24,7 +24,7 @@ DisableProgramGroupPage=yes
 ; Remove the following line to run in administrative install mode (install for all users.)
 PrivilegesRequired=lowest
 OutputDir=..\Setup
-OutputBaseFilename=TestCaseExecutorSetup
+OutputBaseFilename=TestCaseExecutorSetup_V{#MyAppVersion}
 SetupIconFile=..\TestCaseExecutor\resources\testFlask.ico
 Compression=lzma
 SolidCompression=yes
@@ -37,7 +37,7 @@ Name: "german"; MessagesFile: "compiler:Languages\German.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "..\TestCaseExecutor\bin\publish\{#MyAppExeName}"; DestDir: "{localappdata}\TestCaseExecutor\"; Flags: ignoreversion recursesubdirs  createallsubdirs
+Source: "..\TestCaseExecutor\bin\publish\{#MyAppExeName}"; DestDir: "{localappdata}\TestCaseExecutor\"; Flags: ignoreversion recursesubdirs createallsubdirs 
 Source: "..\TestCaseExecutor\bin\publish\*"; DestDir: "{localappdata}\TestCaseExecutor\"; Excludes: "TestCaseExecutor.pdb"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
