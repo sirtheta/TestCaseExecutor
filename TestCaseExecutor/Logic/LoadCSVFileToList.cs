@@ -73,7 +73,7 @@ namespace TestCaseExecutor.Logic
 
             TestSuite suite = new()
             {
-                TestSuiteName = fileName?.Split('\\').LastOrDefault()?.Split('_').FirstOrDefault(),
+                TestSuiteName = fileName?.Split('\\').LastOrDefault()?.Split('_').FirstOrDefault() ?? "Test case executor",
                 TestCases = new ObservableCollection<TestCase>(testCases),
             };
 
