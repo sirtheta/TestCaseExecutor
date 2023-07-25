@@ -1,4 +1,5 @@
 ﻿using MaterialDesignMessageBoxSirTheta;
+using MaterialDesignMessageBoxSirTheta.Definitions;
 using Microsoft.Win32;
 using Notifications.Wpf.Core;
 using System.Collections.ObjectModel;
@@ -27,7 +28,7 @@ namespace TestCaseExecutor.ViewModels
             get => _testCaseCollection;
             set
             {
-                _testCaseCollection = value;                
+                _testCaseCollection = value;
                 OnPropertyChanged();
             }
         }
@@ -95,14 +96,10 @@ namespace TestCaseExecutor.ViewModels
             {
                 try
                 {
-                    if (TestCaseCollection.Count > 0)
+                    if (TestCaseCollection.Count > 0 &&
+                        MaterialDesignMessageBox.Show("Test suite aktualisieren oder eine neue Laden?", MessageType.Question, MessageButtons.Custom, "Aktualisieren", "neue Suite laden") == MaterialDesignMessageBoxResult.Yes)
                     {
-                        var dialogResult = ShowMessageBox("Test suite aktualisieren oder eine neue Laden?", MessageType.Confirmation, MessageButtons.YesNo);
-
-                        if (dialogResult != null && dialogResult == true)
-                        {
-                            LoadCSVFileToList.UpdateTestCasesFromCSV(ofd.FileName, TestCaseCollection);
-                        }
+                        LoadCSVFileToList.UpdateTestCasesFromCSV(ofd.FileName, TestCaseCollection);
                     }
                     else
                     {
