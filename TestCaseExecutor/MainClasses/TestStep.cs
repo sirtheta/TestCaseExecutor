@@ -20,8 +20,24 @@ namespace TestCaseExecutor.MainClasses
         }
 
         public string? TestStepID { get; set; }
-        public string? StepAction { get; set; }
-        public string? StepExpected { get; set; }
+        public string? StepAction 
+        {
+            get => _stepAction; 
+            set
+            {
+                _stepAction = value;
+                OnPropertyChanged();
+            }
+        }
+        public string? StepExpected 
+        {
+            get => _stepExpected; 
+            set
+            {
+                _stepExpected = value;
+                OnPropertyChanged();
+            }
+        }
         public string? AdditionalUserText
         {
             get => _additionalUserText;
@@ -36,6 +52,9 @@ namespace TestCaseExecutor.MainClasses
         public bool TestStepExecuted { get; set; } = false;
 
         private string? _additionalUserText;
+        private string? _stepAction = null;
+        private string? _stepExpected = null;
+
 
         // ignore buttons for JSON export
         [JsonIgnore]

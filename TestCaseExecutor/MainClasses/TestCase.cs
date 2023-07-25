@@ -17,10 +17,19 @@ namespace TestCaseExecutor.MainClasses
     internal class TestCase : Notify
     {
         public string? ID { get; set; }
-        public string? Title { get; set; }
+        public string? Title
+        {
+            get => _title;
+            set
+            {
+                _title = value;
+                OnPropertyChanged();
+            }
+        }
         public ObservableCollection<TestStep> TestSteps { get; set; } = new();
 
         private bool _isExpanded = false;
+        private string? _title = null;
 
         public TestCase()
         {

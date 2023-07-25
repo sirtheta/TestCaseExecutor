@@ -1,6 +1,8 @@
-﻿using Microsoft.Win32;
+﻿using MaterialDesignMessageBoxSirTheta;
+using Microsoft.Win32;
 using Notifications.Wpf.Core;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using TestCaseExecutor.Commands;
 using TestCaseExecutor.Logic;
@@ -25,8 +27,7 @@ namespace TestCaseExecutor.ViewModels
             get => _testCaseCollection;
             set
             {
-                _testCaseCollection = value;
-                InitializeTimer();
+                _testCaseCollection = value;                
                 OnPropertyChanged();
             }
         }
@@ -81,6 +82,7 @@ namespace TestCaseExecutor.ViewModels
         // Import the testsuite from a csv file
         private void LoadCSVFile(object obj)
         {
+
             // set to null, needs new confirmation for saving
             FileExportPath = null;
             OpenFileDialog ofd = new()
@@ -93,12 +95,25 @@ namespace TestCaseExecutor.ViewModels
             {
                 try
                 {
-                    TestCaseCollection = new ObservableCollection<TestCase>(LoadCSVFileToList.LoadCSVFile(ofd.FileName));
-                    ShowNotification("Success", "Test suite successfully imported.", NotificationType.Success);
+                    if (TestCaseCollection.Count > 0)
+                    {
+                        var dialogResult = ShowMessageBox("Test suite aktualisieren oder eine neue Laden?", MessageType.Confirmation, MessageButtons.YesNo);
+
+                        if (dialogResult != null && dialogResult == true)
+                        {
+                            LoadCSVFileToList.UpdateTestCasesFromCSV(ofd.FileName, TestCaseCollection);
+                        }
+                    }
+                    else
+                    {
+                        TestCaseCollection = new ObservableCollection<TestCase>(LoadCSVFileToList.LoadCSVFile(ofd.FileName));
+
+                    }
+                    ShowNotification("Erfolg", "Test suite erfolgreich geladen.", NotificationType.Success);
                 }
                 catch (System.Exception)
                 {
-                    ShowNotification("Error", "File could not be loaded", NotificationType.Error);
+                    ShowNotification("Error", "Datei konnte nicht geladen werden", NotificationType.Error);
                 }
             }
         }
@@ -116,16 +131,17 @@ namespace TestCaseExecutor.ViewModels
             {
                 var fileName = saveFileDialog.FileName;
                 FileExportPath = fileName;
+                InitializeTimer();
             }
 
             if (FileExportPath != null)
             {
                 SaveAndLoadTestData.SaveTestDataFile(FileExportPath, TestCaseCollection);
-                ShowNotification("Success", "Current test suite saved successfully.", NotificationType.Success);
+                ShowNotification("Erfolg", "Test Suite gespeichert.", NotificationType.Success);
             }
             else
             {
-                ShowNotification("Error", "Error saving test suite.", NotificationType.Error);
+                ShowNotification("Error", "Error beim speichern der Test suite.", NotificationType.Error);
             }
         }
 
@@ -150,11 +166,11 @@ namespace TestCaseExecutor.ViewModels
                     {
                         testCase.UpdateStates();
                     }
-                    ShowNotification("Success", "Test suite successfully loaded.", NotificationType.Success);
+                    ShowNotification("Erfolg", "Test suite erfolgreich geladen.", NotificationType.Success);
                 }
                 catch (System.Exception)
                 {
-                    ShowNotification("Error", "File could not be loaded", NotificationType.Error);
+                    ShowNotification("Error", "Datei konnte nicht geladen werden", NotificationType.Error);
                 }
 
             }
