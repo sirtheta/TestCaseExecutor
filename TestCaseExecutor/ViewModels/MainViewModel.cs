@@ -129,28 +129,30 @@ namespace TestCaseExecutor.ViewModels
         // save current state of testsuite to JSON
         private void SaveCurrentTestSuite(object? obj)
         {
-            SaveFileDialog saveFileDialog = new()
-            {
-                Filter = "JSON files (*.json)|*.json"
-            };
+            GeneratePDFReport generatePDFReport = new();
+            generatePDFReport.Build(TestSuite).Build("report.pdf");
+            //SaveFileDialog saveFileDialog = new()
+            //{
+            //    Filter = "JSON files (*.json)|*.json"
+            //};
 
-            // if the file is not saved until now, store the file path for later
-            if (FileExportPath == null && saveFileDialog.ShowDialog() == true)
-            {
-                var fileName = saveFileDialog.FileName;
-                FileExportPath = fileName;
-                InitializeTimer();
-            }
+            //// if the file is not saved until now, store the file path for later
+            //if (FileExportPath == null && saveFileDialog.ShowDialog() == true)
+            //{
+            //    var fileName = saveFileDialog.FileName;
+            //    FileExportPath = fileName;
+            //    InitializeTimer();
+            //}
 
-            if (FileExportPath != null)
-            {
-                SaveAndLoadTestData.SaveTestDataFile(FileExportPath, TestSuite);
-                ShowNotification("Erfolg", "Test Suite gespeichert.", NotificationType.Success);
-            }
-            else
-            {
-                ShowNotification("Error", "Error beim speichern der Test suite.", NotificationType.Error);
-            }
+            //if (FileExportPath != null)
+            //{
+            //    SaveAndLoadTestData.SaveTestDataFile(FileExportPath, TestSuite);
+            //    ShowNotification("Erfolg", "Test Suite gespeichert.", NotificationType.Success);
+            //}
+            //else
+            //{
+            //    ShowNotification("Error", "Error beim speichern der Test suite.", NotificationType.Error);
+            //}
         }
 
         // Load saved test suite from JSON

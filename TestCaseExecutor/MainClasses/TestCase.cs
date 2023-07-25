@@ -26,6 +26,7 @@ namespace TestCaseExecutor.MainClasses
                 OnPropertyChanged();
             }
         }
+        public bool AllStepsSuccessfully { get; set; } = false;
         public ObservableCollection<TestStep> TestSteps { get; set; } = new();
 
         private bool _isExpanded = false;
@@ -63,10 +64,12 @@ namespace TestCaseExecutor.MainClasses
             if (TestSteps.All(step => step.TestStepSuccess))
             {
                 ChangeIconAndColorOfTestStepSuccessState(true);
+                AllStepsSuccessfully = true;
             }
             else
             {
                 ChangeIconAndColorOfTestStepSuccessState(false);
+                AllStepsSuccessfully = false;
             }
         }
 
@@ -129,3 +132,4 @@ namespace TestCaseExecutor.MainClasses
         }
     }
 }
+
