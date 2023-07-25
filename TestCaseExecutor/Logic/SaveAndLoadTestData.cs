@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.IO;
 using TestCaseExecutor.MainClasses;
 
@@ -12,7 +11,7 @@ namespace TestCaseExecutor.Logic
         /// </summary>
         /// <param name="filePath"></param>
         /// <param name="testCases"></param>
-        internal static void SaveTestDataFile(string filePath, IList<TestCase> testCases)
+        internal static void SaveTestDataFile(string filePath, TestSuite testCases)
         {
             string jsonString = JsonConvert.SerializeObject(testCases, Formatting.Indented);
 
@@ -24,10 +23,10 @@ namespace TestCaseExecutor.Logic
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        internal static List<TestCase> LoadTestDataFile(string filePath)
+        internal static TestSuite LoadTestDataFile(string filePath)
         {
             string json = File.ReadAllText(filePath);
-            List<TestCase> deserializedList = JsonConvert.DeserializeObject<List<TestCase>>(json)!;
+            TestSuite deserializedList = JsonConvert.DeserializeObject<TestSuite>(json)!;
             return deserializedList;
 
         }

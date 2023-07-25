@@ -20,18 +20,18 @@ namespace TestCaseExecutor.MainClasses
         }
 
         public string? TestStepID { get; set; }
-        public string? StepAction 
+        public string? StepAction
         {
-            get => _stepAction; 
+            get => _stepAction;
             set
             {
                 _stepAction = value;
                 OnPropertyChanged();
             }
         }
-        public string? StepExpected 
+        public string? StepExpected
         {
-            get => _stepExpected; 
+            get => _stepExpected;
             set
             {
                 _stepExpected = value;

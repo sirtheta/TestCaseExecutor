@@ -3,7 +3,6 @@ using MaterialDesignMessageBoxSirTheta.Definitions;
 using Microsoft.Win32;
 using Notifications.Wpf.Core;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows.Input;
 using TestCaseExecutor.Commands;
 using TestCaseExecutor.Logic;
@@ -32,6 +31,18 @@ namespace TestCaseExecutor.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public TestSuite TestSuite 
+        {
+            get => _testSuite;
+            set
+            {
+                _testSuite = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private TestSuite _testSuite = new();
 
         private string? FileExportPath { get; set; } = null;
 
@@ -99,12 +110,12 @@ namespace TestCaseExecutor.ViewModels
                     if (TestCaseCollection.Count > 0 &&
                         MaterialDesignMessageBox.Show("Test suite aktualisieren oder eine neue Laden?", MessageType.Question, MessageButtons.Custom, "Aktualisieren", "neue Suite laden") == MaterialDesignMessageBoxResult.Yes)
                     {
-                        LoadCSVFileToList.UpdateTestCasesFromCSV(ofd.FileName, TestCaseCollection);
+                        LoadCSVFileToList.UpdateTestCasesFromCSV(ofd.FileName, TestSuite);
                     }
                     else
                     {
-                        TestCaseCollection = new ObservableCollection<TestCase>(LoadCSVFileToList.LoadCSVFile(ofd.FileName));
-
+                        TestSuite = LoadCSVFileToList.LoadCSVFile(ofd.FileName);
+                        TestCaseCollection = TestSuite.TestCases;
                     }
                     ShowNotification("Erfolg", "Test suite erfolgreich geladen.", NotificationType.Success);
                 }
@@ -133,7 +144,7 @@ namespace TestCaseExecutor.ViewModels
 
             if (FileExportPath != null)
             {
-                SaveAndLoadTestData.SaveTestDataFile(FileExportPath, TestCaseCollection);
+                SaveAndLoadTestData.SaveTestDataFile(FileExportPath, TestSuite);
                 ShowNotification("Erfolg", "Test Suite gespeichert.", NotificationType.Success);
             }
             else
@@ -158,7 +169,8 @@ namespace TestCaseExecutor.ViewModels
             {
                 try
                 {
-                    TestCaseCollection = new ObservableCollection<TestCase>(SaveAndLoadTestData.LoadTestDataFile(ofd.FileName));
+                    TestSuite = SaveAndLoadTestData.LoadTestDataFile(ofd.FileName);
+                    TestCaseCollection = TestSuite.TestCases;
                     foreach (var testCase in TestCaseCollection)
                     {
                         testCase.UpdateStates();

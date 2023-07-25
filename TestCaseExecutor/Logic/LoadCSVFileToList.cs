@@ -1,6 +1,7 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -40,7 +41,7 @@ namespace TestCaseExecutor.Logic
         /// </summary>
         /// <param name="fileName">The path of the CSV file to load.</param>
         /// <returns></returns>
-        internal static IList<TestCase> LoadCSVFile(string fileName)
+        internal static TestSuite LoadCSVFile(string fileName)
         {
             List<TestCase> testCases = new();
             foreach (var mapping in ReadCSVFile(fileName))
@@ -70,7 +71,13 @@ namespace TestCaseExecutor.Logic
                 }
             }
 
-            return testCases;
+            TestSuite suite = new()
+            {
+                TestSuiteName = fileName?.Split('\\').LastOrDefault()?.Split('_').FirstOrDefault(),
+                TestCases = new ObservableCollection<TestCase>(testCases),
+            };
+
+            return suite;
         }
 
 
@@ -79,7 +86,7 @@ namespace TestCaseExecutor.Logic
         /// </summary>
         /// <param name="fileName">The path of the CSV file to load.</param>
         /// <param name="currentTestCases">The list of test cases to update.</param>
-        internal static void UpdateTestCasesFromCSV(string fileName, IList<TestCase> currentTestCases)
+        internal static void UpdateTestCasesFromCSV(string fileName, TestSuite currentTestSuite)
         {
             TestCase? currentTestCase = null;
 
@@ -89,7 +96,7 @@ namespace TestCaseExecutor.Logic
                 if (mapping.ID != string.Empty && mapping.Title != string.Empty)
                 {
                     // Find the matching test case in the current list or create a new one
-                    currentTestCase = currentTestCases.FirstOrDefault(tc => tc.ID == mapping.ID);
+                    currentTestCase = currentTestSuite.TestCases.FirstOrDefault(tc => tc.ID == mapping.ID);
                     if (currentTestCase == null)
                     {
                         currentTestCase = new TestCase
@@ -97,7 +104,7 @@ namespace TestCaseExecutor.Logic
                             ID = mapping.ID,
                             Title = mapping.Title
                         };
-                        currentTestCases.Add(currentTestCase);
+                        currentTestSuite.TestCases.Add(currentTestCase);
                     }
                     else
                     {
