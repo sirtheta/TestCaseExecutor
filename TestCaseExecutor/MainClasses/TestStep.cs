@@ -48,7 +48,7 @@ namespace TestCaseExecutor.MainClasses
                 OnPropertyChanged();
             }
         }
-        public bool TestStepSuccess { get; set; } = false;
+        public bool? TestStepSuccess { get; set; } = null;
         public bool TestStepExecuted { get; set; } = false;
 
         private string? _additionalUserText;
@@ -122,7 +122,7 @@ namespace TestCaseExecutor.MainClasses
         /// </summary>        
         internal void UpdateTestStepState()
         {
-            if (TestStepExecuted && TestStepSuccess)
+            if (TestStepExecuted && TestStepSuccess == true)
             {
                 BtnTestStepSuccessExecute(null);
             }

@@ -7,7 +7,7 @@ using TestCaseExecutor.Report;
 
 namespace TestCaseExecutor.Logic
 {
-    internal class GeneratePDFReport
+    internal static class GeneratePDFReport
     {
         // font defines
         internal static readonly FontBuilder FNT8 = Fonts.Helvetica(8f);
@@ -39,7 +39,7 @@ namespace TestCaseExecutor.Logic
                 // generate table in document for each testCase
                 // and each teststep in testcase
                 //ReportTestCaseBuilder builder = new();
-                ReportTestCaseBuilder.Build(section, testCase);                
+                ReportTestCaseBuilder.Build(section, testCase);
 
                 // if it is not the last test case, add a spacing line
                 if (!testCase.Equals(lastTestCase))
@@ -63,23 +63,27 @@ namespace TestCaseExecutor.Logic
         /// <returns>string for the icon</returns>
         internal static string SetIconPath(TestCase? testCase = null, TestStep? testStep = null)
         {
-            bool success = false;
+            bool? success = null;
 
-            if (testCase != null && testCase.AllStepsSuccessfully)
+            if (testCase?.AllStepsSuccessfully == true)
             {
                 success = true;
             }
+            else if (testCase?.AllStepsSuccessfully == false)
+            {
+                success = false;
+            }
 
-            if (testStep != null && testStep.TestStepSuccess)
+            if (testStep?.TestStepSuccess == true)
             {
                 success = true;
             }
-
-            if (success)
+            else if (testStep?.TestStepSuccess == false)
             {
-                return "resources\\success.png";
+                success = false;
             }
-            return "resources\\failed.png";
+
+            return success == true ? "resources\\success.png" : (success == false ? "resources\\failed.png" : "resources\\notExecuted.png");
         }
     }
 }
