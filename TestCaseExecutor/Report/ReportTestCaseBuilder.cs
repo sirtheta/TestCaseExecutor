@@ -15,10 +15,11 @@ namespace TestCaseExecutor.Report
             AddTestCaseRow(testCase);
             AddTestStepDescription();
 
+
             foreach (var testStep in testCase.TestSteps)
             {
                 AddTestStepRow(testStep);
-            }
+            }            
         }
 
         private static void CreateTable(SectionBuilder section)
@@ -36,7 +37,7 @@ namespace TestCaseExecutor.Report
         {
             _table.AddRow()
                     .AddCellToRow()
-                    .SetFont(FNT10B)                        
+                    .SetFont(FNT10B)
                 .AddCellToRow("Testbeschreibung")
                     .SetFont(FNT10B)
                     .SetHorizontalAlignment(HorizontalAlignment.Center)

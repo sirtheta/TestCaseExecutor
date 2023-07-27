@@ -2,6 +2,7 @@
 using MaterialDesignMessageBoxSirTheta.Definitions;
 using Microsoft.Win32;
 using Notifications.Wpf.Core;
+using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using TestCaseExecutor.Commands;
@@ -145,20 +146,21 @@ namespace TestCaseExecutor.ViewModels
                     FileName = TestSuite.TestSuiteName
                 };
 
-                // if the file is not saved until now, store the file path for later
-                if (FileExportPath == null && saveFileDialog.ShowDialog() == true)
+                try
                 {
-                    var fileName = saveFileDialog.FileName;
-                    FileExportPath = fileName;
-                    InitializeTimer();
-                }
+                    // if the file is not saved until now, store the file path for later
+                    if (FileExportPath == null && saveFileDialog.ShowDialog() == true)
+                    {
+                        var fileName = saveFileDialog.FileName;
+                        FileExportPath = fileName;
+                        InitializeTimer();
+                    }
 
-                if (FileExportPath != null)
-                {
+                    ArgumentNullException.ThrowIfNull(FileExportPath);
                     SaveAndLoadTestData.SaveTestDataFile(FileExportPath, TestSuite);
                     ShowNotification("Erfolg", "Test Suite gespeichert.", NotificationType.Success);
                 }
-                else
+                catch (System.Exception)
                 {
                     ShowNotification("Error", "Fehler beim speichern der Test suite.", NotificationType.Error);
                 }
@@ -223,11 +225,12 @@ namespace TestCaseExecutor.ViewModels
                     if (saveFileDialog.ShowDialog() == true)
                     {
                         GeneratePDFReport.Build(TestSuite).Build(saveFileDialog.FileName);
+                        ShowNotification("Erfolg", "PDF erfolgreich erstellt.", NotificationType.Success);
                     }
                 }
                 catch (System.Exception)
                 {
-                    ShowNotification("Error", "Fehler beim speichern des Reports.", NotificationType.Error);
+                    ShowNotification("Error", "Fehler beim speichern des PDF.", NotificationType.Error);
                 }
             }
             else
