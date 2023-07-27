@@ -27,6 +27,7 @@ namespace TestCaseExecutor.Report
                     .AddCellToRow(testStep.AdditionalUserText)
                         .SetFont(FNT10)
                     .AddCell()
+                        .SetVerticalAlignment(VerticalAlignment.Center)
                         .AddImage(SetIconPath(null, testStep))
                         .SetAlignment(HorizontalAlignment.Center)
                         .SetHeight(20)

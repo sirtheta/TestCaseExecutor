@@ -22,6 +22,7 @@ namespace TestCaseExecutor.Report
                 .AddCellToRow(testCase.Title)
                     .SetFont(FNT10)
                 .AddCell()
+                    .SetVerticalAlignment(VerticalAlignment.Center)
                     .AddImage(SetIconPath(testCase, null))
                     .SetAlignment(HorizontalAlignment.Center)
                     .SetHeight(20)
