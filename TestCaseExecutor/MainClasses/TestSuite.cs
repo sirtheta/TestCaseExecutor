@@ -5,9 +5,9 @@ namespace TestCaseExecutor.MainClasses
 {
     internal class TestSuite : Notify
     {
-        public string TestSuiteName 
-        { 
-            get=> _testSuiteName; 
+        public string TestSuiteName
+        {
+            get => _testSuiteName;
             set
             {
                 _testSuiteName = value;
@@ -16,6 +16,6 @@ namespace TestCaseExecutor.MainClasses
         }
         public ObservableCollection<TestCase> TestCases { get; set; } = new();
 
-        private string _testSuiteName = "Test case executor"; 
+        private string _testSuiteName = "Test case executor";
     }
 }

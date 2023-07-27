@@ -11,7 +11,7 @@ namespace TestCaseExecutor.Report
     {
         internal static void Build(SectionBuilder section)
         {
-            section.AddFooterToBothPages(30)                
+            section.AddFooterToBothPages(30)
                    .AddTable()
                    .SetMarginTop(10)
                        .SetWidth(XUnit.FromPercent(100))

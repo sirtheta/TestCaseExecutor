@@ -18,7 +18,7 @@ namespace TestCaseExecutor.Report
                     .AddRow()
                         .AddCell().SetVerticalAlignment(VerticalAlignment.Center)
                             .AddParagraph(testSuiteName + " Testsuite")
-                            .SetFont(FNT19B)                            
+                            .SetFont(FNT19B)
                     .ToRow()
                     .AddCell()
                     .SetVerticalAlignment(VerticalAlignment.Center)

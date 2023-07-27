@@ -9,33 +9,24 @@ namespace TestCaseExecutor.Report
     internal static class ReportTestCaseBuilder
     {
         internal static void Build(SectionBuilder section, TestCase testCase)
-        {       
+        {
             section.AddTable()
-                .SetMarginBottom(10)
+                .SetMarginBottom(0)
                 .SetWidth(XUnit.FromPercent(100))
                 .AddColumnPercentToTable("", 10)
-                .AddColumnPercentToTable("", 80)
-                .AddColumnPercentToTable("", 10)
+                .AddColumnPercentToTable("", 85)
+                .AddColumnPercentToTable("", 5)
                 .AddRow()
                     .AddCellToRow(testCase.ID)
                     .SetFont(FNT10)
                 .AddCellToRow(testCase.Title)
                     .SetFont(FNT10)
                 .AddCell()
-                    .AddImage(SetIconPath(testCase))
+                    .AddImage(SetIconPath(testCase, null))
                     .SetAlignment(HorizontalAlignment.Center)
                     .SetHeight(20)
                     .SetMargins(1)
                 .ToRow();
-        }
-
-        private static string SetIconPath(TestCase testCase)
-        {
-            if (testCase.AllStepsSuccessfully)
-            {
-                return "resources\\success.png";
-            }
-            return "resources\\failed.png";
         }
     }
 }

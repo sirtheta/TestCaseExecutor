@@ -17,6 +17,7 @@ namespace TestCaseExecutor.ViewModels
             BtnLoadCSVFile = new RelayCommand<object>(LoadCSVFile);
             BtnSaveCurrentTestSuite = new RelayCommand<object>(SaveCurrentTestSuite);
             BtnLoadSavedTestSuite = new RelayCommand<object>(LoadSavedTestSuite);
+            BtnGenerateTestReport = new RelayCommand<object>(GenerateTestReport);
         }
 
         private ObservableCollection<TestCase> _testCaseCollection = new();
@@ -32,7 +33,7 @@ namespace TestCaseExecutor.ViewModels
             }
         }
 
-        public TestSuite TestSuite 
+        public TestSuite TestSuite
         {
             get => _testSuite;
             set
@@ -49,6 +50,7 @@ namespace TestCaseExecutor.ViewModels
         public ICommand BtnLoadCSVFile { get; private set; }
         public ICommand BtnSaveCurrentTestSuite { get; private set; }
         public ICommand BtnLoadSavedTestSuite { get; private set; }
+        public ICommand BtnGenerateTestReport { get; private set; }
 
         private readonly int _timerInterval = 10000;
 
@@ -91,7 +93,10 @@ namespace TestCaseExecutor.ViewModels
             autosaveTimer?.Change(_timerInterval, System.Threading.Timeout.Infinite);
         }
 
-        // Import the testsuite from a csv file
+        /// <summary>
+        /// Import the testsuite from a csv file
+        /// </summary>
+        /// <param name="obj"></param>
         private void LoadCSVFile(object obj)
         {
 
@@ -126,36 +131,48 @@ namespace TestCaseExecutor.ViewModels
             }
         }
 
-        // save current state of testsuite to JSON
+        /// <summary>
+        /// save current state of testsuite to JSON
+        /// </summary>
+        /// <param name="obj"></param>
         private void SaveCurrentTestSuite(object? obj)
         {
-            GeneratePDFReport generatePDFReport = new();
-            generatePDFReport.Build(TestSuite).Build("report.pdf");
-            //SaveFileDialog saveFileDialog = new()
-            //{
-            //    Filter = "JSON files (*.json)|*.json"
-            //};
+            if (TestCaseCollection.Count > 0)
+            {
+                SaveFileDialog saveFileDialog = new()
+                {
+                    Filter = "JSON files (*.json)|*.json",
+                    FileName = TestSuite.TestSuiteName
+                };
 
-            //// if the file is not saved until now, store the file path for later
-            //if (FileExportPath == null && saveFileDialog.ShowDialog() == true)
-            //{
-            //    var fileName = saveFileDialog.FileName;
-            //    FileExportPath = fileName;
-            //    InitializeTimer();
-            //}
+                // if the file is not saved until now, store the file path for later
+                if (FileExportPath == null && saveFileDialog.ShowDialog() == true)
+                {
+                    var fileName = saveFileDialog.FileName;
+                    FileExportPath = fileName;
+                    InitializeTimer();
+                }
 
-            //if (FileExportPath != null)
-            //{
-            //    SaveAndLoadTestData.SaveTestDataFile(FileExportPath, TestSuite);
-            //    ShowNotification("Erfolg", "Test Suite gespeichert.", NotificationType.Success);
-            //}
-            //else
-            //{
-            //    ShowNotification("Error", "Error beim speichern der Test suite.", NotificationType.Error);
-            //}
+                if (FileExportPath != null)
+                {
+                    SaveAndLoadTestData.SaveTestDataFile(FileExportPath, TestSuite);
+                    ShowNotification("Erfolg", "Test Suite gespeichert.", NotificationType.Success);
+                }
+                else
+                {
+                    ShowNotification("Error", "Fehler beim speichern der Test suite.", NotificationType.Error);
+                }
+            }
+            else
+            {
+                NoDataWarning();
+            }
         }
 
-        // Load saved test suite from JSON
+        /// <summary>
+        /// Load saved test suite from JSON
+        /// </summary>
+        /// <param name="obj"></param>
         private void LoadSavedTestSuite(object? obj)
         {
             // set to null, needs new confirmation for saving
@@ -181,10 +198,47 @@ namespace TestCaseExecutor.ViewModels
                 }
                 catch (System.Exception)
                 {
-                    ShowNotification("Error", "Datei konnte nicht geladen werden", NotificationType.Error);
+                    ShowNotification("Error", "Fehler beim laden der Datei.", NotificationType.Error);
                 }
 
             }
+        }
+
+        /// <summary>
+        /// generates a PDF report of the testSuite with failed or success state for each case and step
+        /// </summary>
+        /// <param name="obj"></param>
+        private void GenerateTestReport(object? obj)
+        {
+            if (TestCaseCollection.Count > 0)
+            {
+                try
+                {
+                    SaveFileDialog saveFileDialog = new()
+                    {
+                        Filter = "PDF files (*.pdf)|*.pdf",
+                        FileName = TestSuite.TestSuiteName
+                    };
+
+                    if (saveFileDialog.ShowDialog() == true)
+                    {
+                        GeneratePDFReport.Build(TestSuite).Build(saveFileDialog.FileName);
+                    }
+                }
+                catch (System.Exception)
+                {
+                    ShowNotification("Error", "Fehler beim speichern des Reports.", NotificationType.Error);
+                }
+            }
+            else
+            {
+                NoDataWarning();
+            }
+        }
+
+        private static void NoDataWarning()
+        {
+            ShowNotification("Warnung", "Keine Daten zum Speichern vorhanden!.", NotificationType.Warning);
         }
     }
 }

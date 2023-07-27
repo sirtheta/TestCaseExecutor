@@ -208,6 +208,7 @@
             <StackPanel Grid.Column="1" Grid.Row="0">
                 <Button Content="{materialDesign:PackIcon Kind=FileDelimited, Size=30}"    
                         Command="{Binding BtnLoadCSVFile}" 
+                        ToolTip="Import einer Testsuite"
                         Margin="0,10,5,0" 
                         HorizontalAlignment="Right" 
                         FontSize="25" Height="30" 
@@ -215,21 +216,31 @@
                         Padding="0"/>
 
                 <Button Content="{materialDesign:PackIcon Kind=TrayArrowDown, Size=30}"
-                        Command="{Binding BtnLoadSavedTestSuite}"     
+                        Command="{Binding BtnLoadSavedTestSuite}"  
+                        ToolTip="Laden einer Testsuite"
                         Margin="0,10,5,0" 
                         HorizontalAlignment="Right" 
                         FontSize="25" Height="30" Width="30" 
                         Padding="0"/>
 
                 <Button Content="{materialDesign:PackIcon Kind=ContentSave, Size=30}"
-                        Command="{Binding BtnSaveCurrentTestSuite}"     
+                        Command="{Binding BtnSaveCurrentTestSuite}"  
+                        ToolTip="Speichern"
+                        Margin="0,10,5,0" 
+                        HorizontalAlignment="Right" 
+                        FontSize="25" Height="30" Width="30" 
+                        Padding="0"/>
+                
+                <Button Content="{materialDesign:PackIcon Kind=FilePdfBox, Size=30}"
+                        Command="{Binding BtnGenerateTestReport}"  
+                        ToolTip="PDF"
                         Margin="0,10,5,0" 
                         HorizontalAlignment="Right" 
                         FontSize="25" Height="30" Width="30" 
                         Padding="0"/>
             </StackPanel>
             <TextBlock Grid.Row="1"
-                       Text="Copyright © 2023 nemicomp. All rights reserved. Developed and designed by Michael Neuhaus, licensed under the MIT license" 
+                       Text="Copyright © 2023 nemicomp. All rights reserved. Developed and designed by Michael Neuhaus, licensed under the MIT license." 
                        Margin="50,0,0,0" 
                        HorizontalAlignment="Left" 
                        FontSize="12" 
