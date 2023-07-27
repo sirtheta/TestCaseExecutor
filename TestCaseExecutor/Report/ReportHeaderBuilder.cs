@@ -9,8 +9,7 @@ namespace TestCaseExecutor.Report
     {
         internal static void Build(SectionBuilder section, string testSuiteName)
         {
-            section
-                .AddHeaderToBothPages(40)
+            section.AddHeaderToBothPages(40)
                     .AddTable()
                     .SetWidth(XUnit.FromPercent(100))
                     .AddColumnToTable()

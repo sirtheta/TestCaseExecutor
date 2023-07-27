@@ -1,6 +1,5 @@
 ﻿using Gehtsoft.PDFFlow.Builder;
 using Gehtsoft.PDFFlow.Models.Enumerations;
-using Gehtsoft.PDFFlow.Models.Shared;
 using Gehtsoft.PDFFlow.Utils;
 using System.Linq;
 using TestCaseExecutor.MainClasses;
@@ -10,14 +9,11 @@ namespace TestCaseExecutor.Logic
 {
     internal class GeneratePDFReport
     {
+        // font defines
         internal static readonly FontBuilder FNT8 = Fonts.Helvetica(8f);
         internal static readonly FontBuilder FNT10 = Fonts.Helvetica(10f);
-        internal static readonly FontBuilder FNT10BI = Fonts.Helvetica(10f).SetBold();
-        internal static readonly FontBuilder FNT12B = Fonts.Helvetica(12f).SetBold();
-        internal static readonly FontBuilder FNT13 = Fonts.Helvetica(13f);
+        internal static readonly FontBuilder FNT10B = Fonts.Helvetica(10f).SetBold();
         internal static readonly FontBuilder FNT19B = Fonts.Helvetica(19f).SetBold();
-
-        internal static Color DARKBLUE = Color.FromHtml("#000066");
 
         /// <summary>
         /// Main function to generate the report
@@ -35,19 +31,15 @@ namespace TestCaseExecutor.Logic
             // Generate the header for the document
             ReportHeaderBuilder.Build(section, testSuite.TestSuiteName);
 
-            // get last test case for checking later in for-loop
+            // get last test case
             var lastTestCase = testSuite.TestCases.Last();
 
             foreach (var testCase in testSuite.TestCases)
             {
                 // generate table in document for each testCase
                 // and each teststep in testcase
-                ReportTestCaseBuilder.Build(section, testCase);
-                ReportTestStepDescriptionBuilder.Build(section);
-                foreach (var testStep in testCase.TestSteps)
-                {
-                    ReportTestStepBuilder.Build(section, testStep);
-                }
+                //ReportTestCaseBuilder builder = new();
+                ReportTestCaseBuilder.Build(section, testCase);                
 
                 // if it is not the last test case, add a spacing line
                 if (!testCase.Equals(lastTestCase))
