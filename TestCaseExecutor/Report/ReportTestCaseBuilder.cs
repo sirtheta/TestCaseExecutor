@@ -15,7 +15,6 @@ namespace TestCaseExecutor.Report
             AddTestCaseRow(testCase);
             AddTestStepDescription();
 
-
             foreach (var testStep in testCase.TestSteps)
             {
                 AddTestStepRow(testStep);
