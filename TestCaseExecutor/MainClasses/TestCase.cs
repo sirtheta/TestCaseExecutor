@@ -31,7 +31,7 @@ namespace TestCaseExecutor.MainClasses
 
         private bool _isExpanded = false;
         private string? _title = null;
-
+        private bool _testStepStatusChanged = false;
         public TestCase()
         {
             ToggleExpandCommand = new RelayCommand<object>(ToggleExpand);
@@ -39,7 +39,11 @@ namespace TestCaseExecutor.MainClasses
             ((INotifyCollectionChanged)TestSteps).CollectionChanged += TestStepsCollectionChanged;
         }
 
-        // handles the notification of the test steps
+        /// <summary>
+        /// handles the notification of the test steps
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TestStepsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
@@ -58,19 +62,32 @@ namespace TestCaseExecutor.MainClasses
             }
         }
 
-        // 
+        /// <summary>
+        /// handles the event of the success or failed button click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TestStepSuccessOrFailedButtonClick(object? sender, EventArgs e)
         {
             if (TestSteps.All(step => step.TestStepSuccess == true))
             {
                 ChangeIconAndColorOfTestStepSuccessState(true);
                 AllStepsSuccessfully = true;
+                TestStepStatusChanged = true;
             }
             else if (TestSteps.Any(step => step.TestStepSuccess == false))
             {
                 ChangeIconAndColorOfTestStepSuccessState(false);
                 AllStepsSuccessfully = false;
+                TestStepStatusChanged = true;
             }
+        }
+
+        [JsonIgnore]
+        public bool TestStepStatusChanged
+        {
+            get => _testStepStatusChanged;
+            set => _testStepStatusChanged = value;
         }
 
         [JsonIgnore]
