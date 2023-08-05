@@ -53,7 +53,28 @@ namespace TestCaseExecutor.ViewModels
         public ICommand BtnLoadSavedTestSuite { get; private set; }
         public ICommand BtnGenerateTestReport { get; private set; }
 
-        private readonly int _timerInterval = 10000;
+        private static readonly int _timerInterval = 10000;
+        private static readonly double _initialWidth = 1100;
+
+        private double _mainWindowWidth;
+        public double MainWindowWidth
+        {
+            get => _mainWindowWidth;
+            set
+            {
+                _mainWindowWidth = value;
+                AdaptWidthInTestCaseOnChange();
+            }
+        }
+
+        private void AdaptWidthInTestCaseOnChange()
+        {
+            double sizeChange = MainWindowWidth / _initialWidth;
+            foreach (var testCase in TestCaseCollection)
+            {
+                testCase.AdaptWidthOnChange(sizeChange);
+            }
+        }
 
         /// <summary>
         /// Initializing the timer for autosave

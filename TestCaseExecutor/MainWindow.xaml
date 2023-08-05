@@ -10,7 +10,9 @@
         xmlns:helper="clr-namespace:TestCaseExecutor.Helpers"
         d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
         mc:Ignorable="d"
-        Title="{Binding TestSuite.TestSuiteName}" Height="850" Width="1100" MinHeight="800" MinWidth="1100">
+        Title="{Binding TestSuite.TestSuiteName}" 
+        Height="850" Width="1100" 
+        MinHeight="800" MinWidth="1100">
     <Window.Resources>
         <helper:ExpandButtonContentConverter x:Key="ExpandButtonContentConverter" />
     </Window.Resources>
@@ -53,7 +55,7 @@
                         HorizontalAlignment="Right" 
                         FontSize="25" Height="30" Width="30" 
                         Padding="0"/>
-                
+
                 <Button Content="{materialDesign:PackIcon Kind=FilePdfBox, Size=30}"
                         Command="{Binding BtnGenerateTestReport}"  
                         ToolTip="PDF"
@@ -114,15 +116,14 @@
                                 </DockPanel>
                                 <StackPanel Visibility="{Binding IsExpanded, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <StackPanel Orientation="Horizontal">
-                                        <Grid>
+                                        <Grid ShowGridLines="False">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="25"></ColumnDefinition>
-                                                <ColumnDefinition Width="350"></ColumnDefinition>
-                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                                <ColumnDefinition Width="300"></ColumnDefinition>
-                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                                <ColumnDefinition Width="250"></ColumnDefinition>
-                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                <ColumnDefinition Width="30"></ColumnDefinition>
+                                                <ColumnDefinition Width="{Binding WidthCol1}"></ColumnDefinition>
+                                                <ColumnDefinition Width="11"></ColumnDefinition>
+                                                <ColumnDefinition Width="{Binding WidthCol3}"></ColumnDefinition>
+                                                <ColumnDefinition Width="11"></ColumnDefinition>
+                                                <ColumnDefinition Width="{Binding WidthCol5}"></ColumnDefinition>
                                             </Grid.ColumnDefinitions>
 
                                             <TextBlock Grid.Column="1" 
@@ -164,69 +165,65 @@
                                                             </Style.Triggers>
                                                         </Style>
                                                     </DockPanel.Style>
-                                                    <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
-                                                        <Grid>
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="25"></ColumnDefinition>
-                                                                <ColumnDefinition Width="350"></ColumnDefinition>
-                                                                <!--Vertical line-->
-                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                                                <ColumnDefinition Width="300"></ColumnDefinition>
-                                                                <!--Vertical line-->
-                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                                                <ColumnDefinition Width="250"></ColumnDefinition>
-                                                                <ColumnDefinition Width="100"></ColumnDefinition>
-                                                            </Grid.ColumnDefinitions>
+                                                    <Grid ShowGridLines="False">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="30"></ColumnDefinition>
+                                                            <ColumnDefinition Width="{Binding WidthCol1}"></ColumnDefinition>
+                                                            <!--Vertical line-->
+                                                            <ColumnDefinition Width="11"></ColumnDefinition>
+                                                            <ColumnDefinition Width="{Binding WidthCol3}"></ColumnDefinition>
+                                                            <!--Vertical line-->
+                                                            <ColumnDefinition Width="11"></ColumnDefinition>
+                                                            <ColumnDefinition Width="{Binding WidthCol5}"></ColumnDefinition>
+                                                        </Grid.ColumnDefinitions>
 
-                                                            <Label Grid.Column="0" 
-                                                                   Content="{Binding TestStepID}" 
-                                                                   VerticalAlignment="Center" 
-                                                                   Margin="0,0,10,0"/>
+                                                        <Label Grid.Column="0" 
+                                                               Content="{Binding TestStepID}" 
+                                                               VerticalAlignment="Center" 
+                                                               HorizontalAlignment="Left"/>
 
-                                                            <TextBlock Grid.Column="1" 
-                                                                       Text="{Binding StepAction}" 
-                                                                       TextWrapping="Wrap" 
-                                                                       VerticalAlignment="Center" />
+                                                        <TextBlock Grid.Column="1" 
+                                                                   Text="{Binding StepAction}" 
+                                                                   TextWrapping="Wrap" 
+                                                                   VerticalAlignment="Center" />
 
-                                                            <GridSplitter Grid.Column="2" Width="1" VerticalAlignment="Stretch" Background="Black" Margin="5" />
+                                                        <GridSplitter Grid.Column="2" Width="1" VerticalAlignment="Stretch" Background="Black" Margin="5" />
 
-                                                            <TextBlock Grid.Column="3" 
-                                                                       Text="{Binding StepExpected}" 
-                                                                       TextWrapping="Wrap" 
-                                                                       VerticalAlignment="Center" />
+                                                        <TextBlock Grid.Column="3" 
+                                                                   Text="{Binding StepExpected}" 
+                                                                   TextWrapping="Wrap" 
+                                                                   VerticalAlignment="Center" />
 
-                                                            <GridSplitter Grid.Column="4" Width="1" VerticalAlignment="Stretch" Background="Black" Margin="5" />
+                                                        <GridSplitter Grid.Column="4" Width="1" VerticalAlignment="Stretch" Background="Black" Margin="5" />
 
-                                                            <TextBox Grid.Column="5"
-                                                                     Text="{Binding AdditionalUserText}"
-                                                                     TextWrapping="Wrap"
-                                                                     TextAlignment="Left"/>
+                                                        <TextBox Grid.Column="5"
+                                                                 Text="{Binding AdditionalUserText}"
+                                                                 TextWrapping="Wrap"
+                                                                 TextAlignment="Left"/>
 
-                                                            <StackPanel Grid.Column="6" 
-                                                                        Orientation="Horizontal"
-                                                                        Margin="10,0,5,0"
-                                                                        HorizontalAlignment="Right">
+                                                    </Grid>
+                                                    <StackPanel Orientation="Horizontal"
+                                                                Margin="10,0,5,0"
+                                                                HorizontalAlignment="Right">
 
-                                                                <Button  Content="{materialDesign:PackIcon Kind=Check, Size=25}"
-                                                                         Command="{Binding BtnTestStepSuccess}" 
-                                                                         materialDesign:ButtonAssist.CornerRadius="15"
-                                                                         FontSize="25" 
-                                                                         Height="30" 
-                                                                         Width="30" 
-                                                                         Padding="0"
-                                                                         Background="{Binding BtnSuccessColor}"/>
+                                                        <Button  Content="{materialDesign:PackIcon Kind=Check, Size=25}"
+                                                                 Command="{Binding BtnTestStepSuccess}" 
+                                                                 materialDesign:ButtonAssist.CornerRadius="15"
+                                                                 FontSize="25" 
+                                                                 Height="30" 
+                                                                 Width="30" 
+                                                                 Padding="0"
+                                                                 Background="{Binding BtnSuccessColor}"/>
 
-                                                                <Button Content="{materialDesign:PackIcon Kind=Close, Size=25}"
-                                                                        Command="{Binding BtnTestStepFailed}" 
-                                                                        materialDesign:ButtonAssist.CornerRadius="15"
-                                                                        FontSize="25" 
-                                                                        Height="30" 
-                                                                        Width="30" 
-                                                                        Padding="0"
-                                                                        Margin="10"
-                                                                        Background="{Binding BtnFailedColor}"/>
-                                                            </StackPanel>
-                                                        </Grid>
+                                                        <Button Content="{materialDesign:PackIcon Kind=Close, Size=25}"
+                                                                Command="{Binding BtnTestStepFailed}" 
+                                                                materialDesign:ButtonAssist.CornerRadius="15"
+                                                                FontSize="25" 
+                                                                Height="30" 
+                                                                Width="30" 
+                                                                Padding="0"
+                                                                Margin="10"
+                                                                Background="{Binding BtnFailedColor}"/>
                                                     </StackPanel>
                                                 </DockPanel>
                                             </DataTemplate>

@@ -18,7 +18,7 @@ namespace TestCaseExecutor.Report
             foreach (var testStep in testCase.TestSteps)
             {
                 AddTestStepRow(testStep);
-            }            
+            }
         }
 
         private static void CreateTable(SectionBuilder section)

@@ -55,8 +55,7 @@ namespace TestCaseExecutor.MainClasses
         private string? _stepAction = null;
         private string? _stepExpected = null;
 
-
-        // ignore buttons for JSON export
+        // ignore fields for JSON export
         [JsonIgnore]
         public ICommand BtnTestStepFailed { get; private set; }
 
@@ -94,6 +93,42 @@ namespace TestCaseExecutor.MainClasses
             set
             {
                 _btnFailedColor = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _widthCol1;
+        [JsonIgnore]
+        public int WidthCol1
+        {
+            get => _widthCol1;
+            set
+            {
+                _widthCol1 = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _widthCol3;
+        [JsonIgnore]
+        public int WidthCol3
+        {
+            get => _widthCol3;
+            set
+            {
+                _widthCol3 = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _widthCol5;
+        [JsonIgnore]
+        public int WidthCol5
+        {
+            get => _widthCol5;
+            set
+            {
+                _widthCol5 = value;
                 OnPropertyChanged();
             }
         }

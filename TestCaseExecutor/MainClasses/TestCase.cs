@@ -91,6 +91,7 @@ namespace TestCaseExecutor.MainClasses
         private void ToggleExpand(object obj)
         {
             IsExpanded = !IsExpanded;
+            AdaptWidthInTestSteps();
         }
 
         private Brush _allTestStepSuccessStateColor = Brushes.Gray;
@@ -115,6 +116,64 @@ namespace TestCaseExecutor.MainClasses
                 _allTestStepSuccessStateIcon = value;
                 OnPropertyChanged();
             }
+        }
+
+        private static readonly int _initialWidthColumn1 = 350;
+        private static readonly int _initialWidthColumn3 = 300;
+        private static readonly int _initialWidthColumn5 = 250;
+
+        private int _widthCol1 = _initialWidthColumn1;
+        [JsonIgnore]
+        public int WidthCol1
+        {
+            get => _widthCol1;
+            set
+            {
+                _widthCol1 = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _widthCol3 = _initialWidthColumn3;
+        [JsonIgnore]
+        public int WidthCol3
+        {
+            get => _widthCol3;
+            set
+            {
+                _widthCol3 = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _widthCol5 = _initialWidthColumn5;
+        [JsonIgnore]
+        public int WidthCol5
+        {
+            get => _widthCol5;
+            set
+            {
+                _widthCol5 = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private void AdaptWidthInTestSteps()
+        {
+            foreach (var step in TestSteps)
+            {
+                step.WidthCol1 = WidthCol1;
+                step.WidthCol3 = WidthCol3;
+                step.WidthCol5 = WidthCol5;
+            }
+        }
+
+        internal void AdaptWidthOnChange(double change)
+        {
+            WidthCol1 = (int)(_initialWidthColumn1 * change);
+            WidthCol3 = (int)(_initialWidthColumn3 * change);
+            WidthCol5 = (int)(_initialWidthColumn5 * change);
+            AdaptWidthInTestSteps();
         }
 
         private void ChangeIconAndColorOfTestStepSuccessState(bool success)
