@@ -38,11 +38,11 @@ Name: "german"; MessagesFile: "compiler:Languages\German.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "..\publish\{#MyAppExeName}"; DestDir: "{localappdata}\TestCaseExecutor\"; Flags: ignoreversion recursesubdirs createallsubdirs 
-Source: "..\publish\*"; DestDir: "{localappdata}\TestCaseExecutor\"; Excludes: "TestCaseExecutor.pdb"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\publish\{#MyAppExeName}"; DestDir: "{localappdata}\"; Flags: ignoreversion recursesubdirs createallsubdirs 
+Source: "..\publish\*";               DestDir: "{localappdata}\"; Excludes: "TestCaseExecutor.pdb, TestCaseExecutor.runtimeconfig.json"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
-Name: "{group}\{#MyAppName}"; Filename: "{localappdata}\TestCaseExecutor\{#MyAppExeName}"
+Name: "{group}\{#MyAppName}";       Filename: "{localappdata}\TestCaseExecutor\{#MyAppExeName}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{localappdata}\TestCaseExecutor\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
