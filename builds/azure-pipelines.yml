@@ -10,6 +10,12 @@ variables:
   semver: $(major).$(minor)
 
 steps:
+- task: PowerShell@2
+  displayName: Set the name of the pipeline run
+  inputs:
+    targetType: inline
+    script: Write-Host "##vso[build.updatebuildnumber]$(semver)"
+    
 - task: NuGetToolInstaller@1
 
 - task: UseDotNet@2
