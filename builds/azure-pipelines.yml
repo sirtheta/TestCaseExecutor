@@ -1,0 +1,43 @@
+trigger:
+- master
+
+pool:
+  name: Studer
+
+variables:
+  major: 2.0
+  minor: $[counter(variables['major'], 0)]
+  semver: $(major).$(minor)
+
+steps:
+- task: NuGetToolInstaller@1
+
+- task: UseDotNet@2
+  displayName: 'use .Net Core 6'
+  inputs:
+    packageType: 'runtime'
+    version: '6.x'
+    performMultiLevelLookup: true
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build and Publish'
+  inputs:
+    command: publish
+    projects: '**/*.csproj'
+    publishWebProjects: false
+    arguments: '--configuration Release -r win-x64 --self-contained true --output .\publish /p:Version=$(semver)'
+    zipAfterPublish: false
+
+- task: BatchScript@1
+  displayName: Build installer
+  inputs:
+    filename: '"C:\Program Files (x86)\Inno Setup 6\iscc"'
+    arguments: 'builds\buildSetup.iss /dMyAppVersion=$(semver) /dOutputDir="$(build.artifactstagingdirectory)"' 
+    workingFolder: '$(Build.SourcesDirectory)'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish installer'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)'
+    ArtifactName: 'TestCaseExecutor_$(semver)'
+  condition: succeeded()

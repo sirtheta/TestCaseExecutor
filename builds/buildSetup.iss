@@ -2,10 +2,11 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "TestCaseExecutor"
-;#define MyAppVersion "1.1.0"
+;#define MyAppVersion "2.0.0"
 #define MyAppPublisher "Nemicomp"
 #define MyAppURL "https://www.nemicomp.ch/"
 #define MyAppExeName "TestCaseExecutor.exe"
+;#define OutputDir "..\Setup"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -23,7 +24,7 @@ DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 ; Remove the following line to run in administrative install mode (install for all users.)
 PrivilegesRequired=lowest
-OutputDir=..\Setup
+OutputDir={#OutputDir}
 OutputBaseFilename=TestCaseExecutorSetup_V{#MyAppVersion}
 SetupIconFile=..\TestCaseExecutor\resources\testFlask.ico
 Compression=lzma
@@ -37,14 +38,12 @@ Name: "german"; MessagesFile: "compiler:Languages\German.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "..\TestCaseExecutor\{#MyAppExeName}"; DestDir: "{localappdata}\TestCaseExecutor\"; Flags: ignoreversion recursesubdirs createallsubdirs 
-Source: "..\TestCaseExecutor\*";               DestDir: "{localappdata}\TestCaseExecutor\"; Excludes: "TestCaseExecutor.pdb"; Flags: ignoreversion recursesubdirs createallsubdirs
-; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+Source: "..\publish\{#MyAppExeName}"; DestDir: "{localappdata}\TestCaseExecutor\"; Flags: ignoreversion recursesubdirs createallsubdirs 
+Source: "..\publish\*"; DestDir: "{localappdata}\TestCaseExecutor\"; Excludes: "TestCaseExecutor.pdb"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
-Name: "{group}\{#MyAppName}";       Filename: "{localappdata}\TestCaseExecutor\{#MyAppExeName}"
+Name: "{group}\{#MyAppName}"; Filename: "{localappdata}\TestCaseExecutor\{#MyAppExeName}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{localappdata}\TestCaseExecutor\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
 Filename: "{localappdata}\TestCaseExecutor\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
-
