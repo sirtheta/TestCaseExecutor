@@ -4,6 +4,7 @@ using Microsoft.Win32;
 using Notifications.Wpf.Core;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows.Input;
 using TestCaseExecutor.Commands;
 using TestCaseExecutor.Logic;
@@ -231,22 +232,36 @@ namespace TestCaseExecutor.ViewModels
 
                 try
                 {
-                    // if the file is not saved until now, store the file path for later
-                    if (FileExportPath == null && saveFileDialog.ShowDialog() == true)
+                    if (FileExportPath == null || !File.Exists(FileExportPath))
                     {
-                        FileExportPath = saveFileDialog.FileName;
-                        InitializeAutoSaveTimer();
+                        // Show the Save File dialog if FileExportPath is null or the file does not exist
+                        if (saveFileDialog.ShowDialog() == true)
+                        {
+                            FileExportPath = saveFileDialog.FileName;
+                            InitializeAutoSaveTimer();
+                        }
+                        else
+                        {
+                            // Operation cancelled
+                            return;
+                        }
                     }
-
-                    ArgumentNullException.ThrowIfNull(FileExportPath);
-                    SaveAndLoadTestData.SaveTestDataFile(FileExportPath, TestSuite);
-                    // rest the change state after saving to json
-                    ResetChangeState();
-                    ShowNotification("Erfolg", "Test Suite gespeichert.", NotificationType.Success);
+                    
+                    if (!string.IsNullOrEmpty(FileExportPath))
+                    {
+                        SaveAndLoadTestData.SaveTestDataFile(FileExportPath, TestSuite);
+                        // rest the change state after saving to json
+                        ResetChangeState();
+                        ShowNotification("Erfolg", "Test Suite gespeichert.", NotificationType.Success);
+                    }
+                    else
+                    {
+                        ErrorSavingSuite();
+                    }
                 }
                 catch (Exception)
                 {
-                    ShowNotification("Error", "Fehler beim speichern der Test suite.", NotificationType.Error);
+                    ErrorSavingSuite();
                 }
             }
             else
@@ -335,6 +350,14 @@ namespace TestCaseExecutor.ViewModels
         private static void NoDataWarning()
         {
             ShowNotification("Warnung", "Keine Daten zum Speichern vorhanden!.", NotificationType.Warning);
+        }
+
+        /// <summary>
+        /// Shows a saving error in notification
+        /// </summary>
+        private static void ErrorSavingSuite()
+        {
+            ShowNotification("Error", "Fehler beim speichern der Test suite.", NotificationType.Error);
         }
     }
 }
