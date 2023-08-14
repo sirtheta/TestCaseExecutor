@@ -17,8 +17,9 @@ namespace TestCaseExecutor.ViewModels
         public MainViewModel()
         {
             BtnLoadCSVFile = new RelayCommand<object>(LoadCSVFile);
-            BtnSaveCurrentTestSuite = new RelayCommand<object>(SaveCurrentTestSuite);
             BtnLoadSavedTestSuite = new RelayCommand<object>(LoadSavedTestSuite);
+            BtnSaveCurrentTestSuite = new RelayCommand<object>(SaveCurrentTestSuite);
+            BtnSaveAsNew = new RelayCommand<object>(SaveAsNewFile);
             BtnGenerateTestReport = new RelayCommand<object>(GenerateTestReport);
         }
 
@@ -50,8 +51,9 @@ namespace TestCaseExecutor.ViewModels
         private string? FileExportPath { get; set; } = null;
 
         public ICommand BtnLoadCSVFile { get; private set; }
-        public ICommand BtnSaveCurrentTestSuite { get; private set; }
         public ICommand BtnLoadSavedTestSuite { get; private set; }
+        public ICommand BtnSaveCurrentTestSuite { get; private set; }
+        public ICommand BtnSaveAsNew { get; private set; }
         public ICommand BtnGenerateTestReport { get; private set; }
 
         private static readonly int _timerInterval = 10000;
@@ -109,7 +111,7 @@ namespace TestCaseExecutor.ViewModels
         {
             if (MaterialDesignMessageBox.Show("Es sind Änderungen vorhanden. Möchtest Du speichern?", MessageType.Question, MessageButtons.Custom, "Speichern", "Verwerfen") == MaterialDesignMessageBoxResult.Yes)
             {
-                SaveCurrentTestSuite(null);
+                SaveTestSuite();
             }
         }
 
@@ -159,7 +161,7 @@ namespace TestCaseExecutor.ViewModels
             // Save the data if any changes were detected
             if (CheckForChanges())
             {
-                SaveCurrentTestSuite(null);
+                SaveTestSuite();
             }
 
             // Restart the timer to run again after the specified interval
@@ -217,11 +219,34 @@ namespace TestCaseExecutor.ViewModels
         }
 
         /// <summary>
+        /// callback to save testsuite as new file
+        /// </summary>
+        /// <param name="obj"></param>
+        private void SaveAsNewFile(object obj)
+        {
+            // store path if user abort saving process, restore it
+            var tempPath = FileExportPath;
+            ResetFileSaveSettings();
+            if (!SaveTestSuite())
+            {
+                FileExportPath = tempPath;
+                InitializeAutoSaveTimer();
+            }
+        }
+
+
+        private void SaveCurrentTestSuite(object? obj)
+        {
+            SaveTestSuite();
+        }
+
+        /// <summary>
         /// Save current state of testsuite to JSON
         /// </summary>
         /// <param name="obj"></param>
-        private void SaveCurrentTestSuite(object? obj)
+        private bool SaveTestSuite()
         {
+            bool retVal = false;
             if (TestCaseCollection.Count > 0)
             {
                 SaveFileDialog saveFileDialog = new()
@@ -243,16 +268,17 @@ namespace TestCaseExecutor.ViewModels
                         else
                         {
                             // Operation cancelled
-                            return;
+                            return retVal;
                         }
                     }
-                    
+
                     if (!string.IsNullOrEmpty(FileExportPath))
                     {
                         SaveAndLoadTestData.SaveTestDataFile(FileExportPath, TestSuite);
                         // rest the change state after saving to json
                         ResetChangeState();
                         ShowNotification("Erfolg", "Test Suite gespeichert.", NotificationType.Success);
+                        retVal = true;
                     }
                     else
                     {
@@ -268,6 +294,7 @@ namespace TestCaseExecutor.ViewModels
             {
                 NoDataWarning();
             }
+            return retVal;
         }
 
         /// <summary>
