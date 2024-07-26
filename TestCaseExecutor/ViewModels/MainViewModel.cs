@@ -60,7 +60,7 @@ namespace TestCaseExecutor.ViewModels
         private static readonly double _initialWidth = 1100;
 
         private double _mainWindowWidth;
-        private string _copyright = $"Copyright © 2023 nemicomp. All rights reserved. Developed and designed by Michael Neuhaus, licensed under the MIT license. Version: {GetVersion()}";
+        private string _copyright = $"Copyright © {DateTime.Now.Year} nemicomp. All rights reserved. Developed and designed by Michael Neuhaus, licensed under the MIT license. Version: {GetVersion()}";
         public string Copyright { get => _copyright; set => _copyright = value; }
         public double MainWindowWidth
         {
