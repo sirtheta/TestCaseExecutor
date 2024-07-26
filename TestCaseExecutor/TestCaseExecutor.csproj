@@ -16,7 +16,7 @@
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="33.0.1" />
     <PackageReference Include="Gehtsoft.PDFFlowLib" Version="2.1.1" />
-    <PackageReference Include="MaterialDesignMessageBox.SirTheta" Version="2.1.0" />
+    <PackageReference Include="MaterialDesignMessageBox.SirTheta" Version="2.1.1" />
     <PackageReference Include="MaterialDesignThemes" Version="5.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Notifications.Wpf.Core" Version="1.4.1" />
