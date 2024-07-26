@@ -19,10 +19,10 @@ steps:
 - task: NuGetToolInstaller@1
 
 - task: UseDotNet@2
-  displayName: 'use .Net Core 6'
+  displayName: 'use .Net Core 8'
   inputs:
     packageType: 'runtime'
-    version: '6.x'
+    version: '8.x'
     performMultiLevelLookup: true
 
 - task: DotNetCoreCLI@2
