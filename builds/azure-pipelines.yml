@@ -1,5 +1,5 @@
 trigger:
-- master
+- main
 
 pool:
   name: Studer
@@ -19,11 +19,17 @@ steps:
 - task: NuGetToolInstaller@1
 
 - task: UseDotNet@2
-  displayName: 'use .Net Core 6'
+  displayName: 'Use .NET 8.0 SDK'
   inputs:
-    packageType: 'runtime'
-    version: '6.x'
-    performMultiLevelLookup: true
+    packageType: 'sdk'
+    version: '8.0.x'
+    includePreviewVersions: false
+
+- task: DotNetCoreCLI@2
+  displayName: 'Restore project dependencies'
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
 
 - task: DotNetCoreCLI@2
   displayName: 'Build and Publish'
@@ -31,7 +37,7 @@ steps:
     command: publish
     projects: '**/*.csproj'
     publishWebProjects: false
-    arguments: '--configuration Release -r win-x64 --self-contained true --output .\publish /p:Version=$(semver)'
+    arguments: '--configuration Release -r win-x64 --self-contained true --framework net8.0-windows7.0 --output .\publish /p:Version=$(semver)'
     zipAfterPublish: false
 
 - task: BatchScript@1
