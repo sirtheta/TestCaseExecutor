@@ -1,4 +1,20 @@
-﻿using MaterialDesignMessageBoxSirTheta;
+/*
+ * Copyright (C) 2024 Michael Neuhaus
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+using MaterialDesignMessageBoxSirTheta;
 using MaterialDesignMessageBoxSirTheta.Definitions;
 using Microsoft.Win32;
 using Notifications.Wpf.Core;
@@ -60,7 +76,8 @@ namespace TestCaseExecutor.ViewModels
         private static readonly double _initialWidth = 1100;
 
         private double _mainWindowWidth;
-        private string _copyright = $"Copyright © {DateTime.Now.Year} nemicomp. All rights reserved. Developed and designed by Michael Neuhaus, licensed under the MIT license. Version: {GetVersion()}";
+        private string _copyright = $"Copyright © {DateTime.Now.Year} nemicomp. All rights reserved. Developed and designed by Michael Neuhaus, licensed under GPL3 license. Productversion: {GetVersion()}";
+
         public string Copyright { get => _copyright; set => _copyright = value; }
         public double MainWindowWidth
         {
@@ -132,7 +149,7 @@ namespace TestCaseExecutor.ViewModels
         }
 
         /// <summary>
-        /// Adapts the width of the textboxes for all testcases. 
+        /// Adapts the width of the textboxes for all testcases.
         /// (in the test steps as well)
         /// </summary>
         private void AdaptWidthInTestCaseOnChange()
@@ -153,7 +170,7 @@ namespace TestCaseExecutor.ViewModels
         }
 
         /// <summary>
-        /// Callback for the autosave method. 
+        /// Callback for the autosave method.
         /// </summary>
         /// <param name="state"></param>
         private void AutosaveCallback(object? state)

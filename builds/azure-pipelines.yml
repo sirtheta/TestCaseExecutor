@@ -1,5 +1,11 @@
 trigger:
-- main
+  branches:
+    include:
+    - main
+  paths:
+    include:
+    - 'TestCaseExecutor/**'
+    - 'builds/**'
 
 pool:
   name: Studer
@@ -15,7 +21,7 @@ steps:
   inputs:
     targetType: inline
     script: Write-Host "##vso[build.updatebuildnumber]$(semver)"
-    
+
 - task: NuGetToolInstaller@1
 
 - task: UseDotNet@2
@@ -44,7 +50,7 @@ steps:
   displayName: Build installer
   inputs:
     filename: '"C:\Program Files (x86)\Inno Setup 6\iscc"'
-    arguments: 'builds\buildSetup.iss /dMyAppVersion=$(semver) /dOutputDir="$(build.artifactstagingdirectory)"' 
+    arguments: 'builds\buildSetup.iss /dMyAppVersion=$(semver) /dOutputDir="$(build.artifactstagingdirectory)"'
     workingFolder: '$(Build.SourcesDirectory)'
 
 - task: PublishBuildArtifacts@1
